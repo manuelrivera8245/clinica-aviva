@@ -324,17 +324,40 @@ mysql -u root -p clinica_aviva < database/clinica_aviva_schema.sql
 
 ### 2. Backend — Variables de Entorno
 
-Crea el archivo `backend/src/main/resources/application-local.properties` (está en el `.gitignore`, **no se sube al repositorio**):
+> **⚠️ Buena práctica de seguridad**: Las credenciales **no deben vivir en archivos `.properties`** dentro de `src/`, ya que corren el riesgo de empaquetarse en el `.jar` final o quedar en el historial de Git. En su lugar, se inyectan mediante **variables de entorno del sistema operativo**, que Spring Boot resuelve automáticamente gracias a su *Relaxed Binding* (ej. `SPRING_DATASOURCE_URL` → `spring.datasource.url`).
 
-```properties
-# Conexión a la base de datos
-spring.datasource.url=jdbc:mysql://localhost:3306/clinica_aviva?useSSL=false&serverTimezone=America/Lima
-spring.datasource.username=TU_USUARIO_MYSQL
-spring.datasource.password=TU_CONTRASEÑA_MYSQL
+**Paso 1**: Copia el archivo de plantilla y completa tus credenciales locales:
 
-# Configuración JWT (usa una clave de al menos 256 bits)
-app.jwt.secret=TU_CLAVE_SECRETA_JWT_MUY_LARGA_Y_SEGURA
-app.jwt.expiration=86400000
+```bash
+# Desde la raíz del proyecto
+cp .env.example .env
+```
+
+**Paso 2**: Edita `.env` con tus valores reales (este archivo está en `.gitignore`, **nunca se sube al repositorio**):
+
+```dotenv
+# Conexión a MySQL
+SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/clinica_aviva?useSSL=false&serverTimezone=America/Lima
+SPRING_DATASOURCE_USERNAME=tu_usuario_mysql
+SPRING_DATASOURCE_PASSWORD=tu_contraseña_mysql
+
+# JWT — clave de al menos 256 bits (64 caracteres hex)
+APP_JWT_SECRET=cambia_esto_por_una_clave_secreta_larga_y_aleatoria
+APP_JWT_EXPIRATION=86400000
+
+# Perfil activo de Spring
+SPRING_PROFILES_ACTIVE=dev
+```
+
+**Paso 3**: Al ejecutar el backend, carga las variables antes de arrancar Maven:
+
+```bash
+# Linux / macOS
+export $(grep -v '^#' .env | xargs) && mvn spring-boot:run
+
+# Windows PowerShell
+Get-Content .env | Where-Object { $_ -notmatch '^#' -and $_ -ne '' } | ForEach-Object { $k,$v = $_ -split '=',2; [System.Environment]::SetEnvironmentVariable($k, $v, 'Process') }
+mvn spring-boot:run
 ```
 
 ### 3. Frontend — Variables de Entorno
@@ -360,8 +383,8 @@ cd backend
 # Compilar el proyecto
 mvn clean install -DskipTests
 
-# Ejecutar el servidor (Puerto 8080)
-mvn spring-boot:run -Dspring-boot.run.profiles=local
+# Ejecutar el servidor (Puerto 8080) — las variables de entorno deben estar cargadas antes
+mvn spring-boot:run
 ```
 
 El servidor estará disponible en: `http://localhost:8080`

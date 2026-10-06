@@ -1,6 +1,5 @@
 import { Directive, HostListener } from '@angular/core';
 
-// Directiva soloNumeros
 @Directive({
   selector: '[soloNumeros]'
 })
@@ -8,7 +7,6 @@ export class SoloNumerosDirective {
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    // Permitir teclas de control
     const teclasTControl = [
       'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
       'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
@@ -19,12 +17,10 @@ export class SoloNumerosDirective {
       return;
     }
 
-    // Permitir atajos
     if (event.ctrlKey && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
       return;
     }
 
-    // Permitir digitos
     if (!/^[0-9]$/.test(event.key)) {
       event.preventDefault();
     }

@@ -1,0 +1,125 @@
+# =============================================================================
+# Clinica Aviva — .gitignore
+# Stack: Angular (frontend) + Spring Boot / Maven (backend)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Frontend — Angular / Node
+# -----------------------------------------------------------------------------
+/frontend/node_modules/
+/frontend/.angular/
+/frontend/dist/
+
+# pnpm
+/frontend/.pnpm-store/
+/frontend/.pnpm-debug.log
+
+# Logs generados por npm/pnpm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Caché de Angular CLI
+/frontend/.angular/cache/
+
+# Archivos de construcción opcionales
+/frontend/.sass-cache/
+/frontend/connect.lock
+/frontend/coverage/
+/frontend/libpeerconnection.log
+/frontend/testem.log
+/frontend/typings/
+
+# -----------------------------------------------------------------------------
+# Backend — Java / Maven
+# -----------------------------------------------------------------------------
+/backend/target/
+
+# Archivos compilados de Java
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Logs de Maven
+/backend/*.log
+
+# Maven Wrapper (opcional, descomenta si no quieres subir el wrapper)
+# /backend/.mvn/
+# /backend/mvnw
+# /backend/mvnw.cmd
+
+# -----------------------------------------------------------------------------
+# Editor y entorno de desarrollo
+# -----------------------------------------------------------------------------
+/.vscode/
+.idea/
+*.iml
+.classpath
+.project
+.factorypath
+.settings/
+
+# Eclipse
+*.launch
+.springBeans
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+
+# -----------------------------------------------------------------------------
+# Archivos de secretos y credenciales (¡NUNCA subir!)
+# -----------------------------------------------------------------------------
+*.env
+*.env.local
+*.env.development
+*.env.staging
+*.env.production
+*.local
+
+# Archivos de configuración con credenciales específicas
+application-local.properties
+application-local.yml
+application-secret*.properties
+application-secret*.yml
+secrets.properties
+secrets.yml
+
+# Claves privadas y certificados
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+
+# -----------------------------------------------------------------------------
+# Sistema operativo
+# -----------------------------------------------------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+
+# -----------------------------------------------------------------------------
+# Miscelánea
+# -----------------------------------------------------------------------------
+*.tmp
+*.temp
+*.swp
+*.bak
+*.orig

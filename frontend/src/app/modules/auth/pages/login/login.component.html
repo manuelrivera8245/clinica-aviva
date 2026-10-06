@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="login-card">
+    <!-- Brand -->
+    <div class="text-center mb-4">
+      <div class="brand-icon mb-3">
+        <i class="fas fa-heartbeat fa-2x text-white"></i>
+      </div>
+      <h1 class="h4 fw-bold text-primario">Clínica Aviva</h1>
+      <p class="text-muted small">Sistema de Gestión de Citas Médicas</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <h2 class="h5 fw-semibold mb-4">Iniciar Sesión</h2>
+
+      <!-- Credencial -->
+      <div class="mb-3">
+        <label for="credencial" class="form-label">
+          <i class="fas fa-id-card me-1 text-muted"></i> DNI, correo o usuario
+        </label>
+        <input type="text" id="credencial" class="form-control"
+               formControlName="credencial" placeholder="Ingrese su DNI, correo o usuario"
+               [ngClass]="{'is-invalid': f['credencial'].touched && f['credencial'].invalid}">
+        <div class="invalid-feedback">Ingrese un identificador válido (mínimo 3 caracteres).</div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="mb-4">
+        <label for="contrasena" class="form-label">
+          <i class="fas fa-lock me-1 text-muted"></i> Contraseña
+        </label>
+        <div class="input-group">
+          <input [type]="mostrarContrasena ? 'text' : 'password'"
+                 id="contrasena" class="form-control"
+                 formControlName="contrasena" placeholder="Ingrese su contraseña"
+                 [ngClass]="{'is-invalid': f['contrasena'].touched && f['contrasena'].invalid}">
+          <button class="btn btn-outline-secondary" type="button"
+                  (click)="mostrarContrasena = !mostrarContrasena" id="btn-toggle-pass">
+            <i class="fas" [ngClass]="mostrarContrasena ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+          <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+        </div>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold"
+              id="btn-ingresar" [disabled]="cargando">
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!cargando" class="fas fa-sign-in-alt me-2"></i>
+        {{ cargando ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+
+    <!-- Links -->
+    <div class="text-center mt-4 pt-3 border-top">
+      <p class="text-muted small mb-1">¿No tienes cuenta?</p>
+      <a routerLink="/auth/registro" class="fw-semibold" id="link-registro">
+        <i class="fas fa-user-plus me-1"></i>Regístrate como paciente
+      </a>
+    </div>
+
+    <div class="text-center mt-3">
+      <a routerLink="/inicio" class="text-muted small">
+        <i class="fas fa-arrow-left me-1"></i>Volver al inicio
+      </a>
+    </div>
+  </div>
+</div>

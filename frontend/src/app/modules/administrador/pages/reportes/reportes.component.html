@@ -1,0 +1,110 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Administrativo" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-file-alt me-2"></i>Reportes del Sistema</h2>
+      <p class="text-muted mb-0">Estadísticas y métricas de ausentismo</p>
+    </div>
+
+    <!-- Filtro de fechas -->
+    <div class="card-aviva p-3 mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Desde</label>
+          <input type="date" class="form-control" [(ngModel)]="desde" id="reporte-desde">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Hasta</label>
+          <input type="date" class="form-control" [(ngModel)]="hasta" id="reporte-hasta">
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-primary w-100" (click)="cargar()" id="btn-generar-reporte">
+            <i class="fas fa-search me-2"></i>Generar Reporte
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs del reporte -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="card-kpi"><div class="kpi-value">{{ citas.length }}</div><div class="kpi-label">Total Citas</div></div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color:var(--color-exito)">
+          <div class="kpi-value" style="color:var(--color-exito)">{{ totalAtendidas }}</div>
+          <div class="kpi-label">Atendidas</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color:var(--color-advertencia)">
+          <div class="kpi-value" style="color:var(--color-advertencia)">{{ totalNoAsistio }}</div>
+          <div class="kpi-label">No Asistieron</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color:var(--color-peligro)">
+          <div class="kpi-value" style="color:var(--color-peligro)">{{ tasaAusentismo }}</div>
+          <div class="kpi-label">Tasa Ausentismo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de citas del período -->
+    <div class="card-aviva mb-4">
+      <div class="p-3 border-bottom fw-semibold text-primario">
+        <i class="fas fa-table me-2"></i>Detalle de Citas del Período
+      </div>
+      <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+      <div class="table-responsive" *ngIf="!cargando && citas.length > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead><tr><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Médico</th><th>Especialidad</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let c of citas">
+              <td>{{ c.fechaCita | date:'dd/MM/yyyy':'':'es' }}</td>
+              <td>{{ c.horaInicio | slice:0:5 }}</td>
+              <td>{{ c.nombrePaciente }}</td>
+              <td>Dr. {{ c.nombreMedico }}</td>
+              <td>{{ c.nombreEspecialidad }}</td>
+              <td><span class="estado-badge" [ngClass]="{
+                'estado-programada': c.estado==='Programada',
+                'estado-atendida':   c.estado==='Atendida',
+                'estado-no-asistio': c.estado==='No Asistio',
+                'estado-cancelada':  c.estado==='Cancelada'
+              }">{{ c.estado }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-5 text-center text-muted" *ngIf="!cargando && citas.length === 0">
+        <i class="fas fa-chart-bar fa-3x mb-3"></i><p>No hay citas en el período seleccionado.</p>
+      </div>
+    </div>
+
+    <!-- Ausentismo por médico -->
+    <div class="card-aviva" *ngIf="ausentismo.length > 0">
+      <div class="p-3 border-bottom fw-semibold text-primario">
+        <i class="fas fa-user-md me-2"></i>Ausentismo por Médico
+      </div>
+      <div class="table-responsive">
+        <table class="table table-aviva table-hover mb-0">
+          <thead><tr><th>Médico</th><th>Especialidad</th><th>Total Citas</th><th>No Asistieron</th><th>Tasa</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let a of ausentismo">
+              <td>Dr. {{ a.nombreMedico }}</td>
+              <td>{{ a.especialidad }}</td>
+              <td>{{ a.totalCitas }}</td>
+              <td class="text-danger fw-semibold">{{ a.noAsistio }}</td>
+              <td>
+                <span class="fw-bold" [ngClass]="a.tasa >= 30 ? 'text-danger' : a.tasa >= 15 ? 'text-warning' : 'text-success'">
+                  {{ a.tasa | number:'1.1-1' }}%
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

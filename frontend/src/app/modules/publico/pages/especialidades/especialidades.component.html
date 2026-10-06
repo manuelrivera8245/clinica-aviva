@@ -1,0 +1,48 @@
+<app-navbar></app-navbar>
+
+<section class="hero-aviva py-4" style="min-height: auto;">
+  <div class="container py-3">
+    <h1 class="mb-2">Nuestras Especialidades</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a routerLink="/inicio" class="text-white-50">Inicio</a></li>
+        <li class="breadcrumb-item active text-white">Especialidades</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">Atención Médica Especializada</h2>
+      <p class="section-subtitle">Contamos con especialistas certificados en todas las áreas de la salud</p>
+    </div>
+
+    <app-loading-spinner [visible]="cargando" mensaje="Cargando especialidades..."></app-loading-spinner>
+
+    <div class="row g-4" *ngIf="!cargando">
+      <div class="col-md-6 col-lg-4" *ngFor="let esp of especialidades; let i = index">
+        <div class="card-aviva p-4">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div class="icono-esp">
+              <i class="fas {{ getIcono(i) }}"></i>
+            </div>
+            <h5 class="mb-0 fw-semibold">{{ esp.nombre }}</h5>
+          </div>
+          <p class="text-muted small mb-3">{{ esp.descripcion }}</p>
+          <a routerLink="/auth/registro" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-calendar-plus me-1"></i>Reservar consulta
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!cargando && especialidades.length === 0" class="text-center py-5">
+      <i class="fas fa-stethoscope fa-3x text-muted mb-3"></i>
+      <p class="text-muted">No hay especialidades disponibles en este momento.</p>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

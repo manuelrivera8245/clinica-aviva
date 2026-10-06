@@ -1,0 +1,8 @@
+.icono-info {
+  width: 40px; height: 40px; min-width: 40px;
+  border-radius: 10px;
+  background: rgba(0,119,182,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-primario);
+}
+.bg-primario { background-color: var(--color-primario) !important; }

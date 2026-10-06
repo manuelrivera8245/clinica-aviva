@@ -1,0 +1,168 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Paciente" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-calendar-plus me-2"></i>Reservar Cita Médica</h2>
+      <p class="text-muted mb-0">Siga los pasos para completar su reserva</p>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="card-aviva p-4 mb-4">
+      <div class="stepper">
+        <div class="step-item" *ngFor="let paso of pasos" [ngClass]="getClasePaso(paso.num)"
+             (click)="irAPaso(paso.num)" style="cursor:pointer;">
+          <div class="step-numero">
+            <i class="fas fa-check" *ngIf="paso.num < pasoActual"></i>
+            <span *ngIf="paso.num >= pasoActual">{{ paso.num }}</span>
+          </div>
+          <div class="step-label">{{ paso.label }}</div>
+        </div>
+      </div>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <!-- PASO 1: Especialidad -->
+    <div *ngIf="pasoActual === 1 && !cargando">
+      <h5 class="fw-semibold mb-3">Paso 1: Seleccione una Especialidad</h5>
+      <div class="row g-3">
+        <div class="col-sm-6 col-lg-4" *ngFor="let esp of especialidades">
+          <div class="card-aviva p-3 d-flex align-items-center gap-3 cursor-pointer"
+               [class.seleccionado]="especialidadSeleccionada?.idEspecialidad === esp.idEspecialidad"
+               (click)="seleccionarEspecialidad(esp)"
+               [id]="'esp-' + esp.idEspecialidad">
+            <div class="icono-paso"><i class="fas fa-stethoscope"></i></div>
+            <div>
+              <div class="fw-semibold">{{ esp.nombre }}</div>
+              <small class="text-muted">{{ esp.descripcion | slice:0:50 }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 2: Médico -->
+    <div *ngIf="pasoActual === 2 && !cargando">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-semibold mb-0">Paso 2: Seleccione un Médico</h5>
+        <button class="btn btn-outline-secondary btn-sm" (click)="pasoActual = 1">
+          <i class="fas fa-arrow-left me-1"></i>Volver
+        </button>
+      </div>
+      <div class="alert alert-info small">
+        <i class="fas fa-info-circle me-1"></i>
+        Especialidad: <strong>{{ especialidadSeleccionada?.nombre }}</strong>
+      </div>
+      <div class="row g-3">
+        <div class="col-sm-6 col-lg-4" *ngFor="let med of medicos">
+          <div class="card-aviva p-3 cursor-pointer"
+               [class.seleccionado]="medicoSeleccionado?.idMedico === med.idMedico"
+               (click)="seleccionarMedico(med)"
+               [id]="'med-' + med.idMedico">
+            <div class="d-flex align-items-center gap-3">
+              <div class="avatar-medico"><i class="fas fa-user-md"></i></div>
+              <div>
+                <div class="fw-semibold">Dr. {{ med.nombres }} {{ med.apellidos }}</div>
+                <small class="text-muted">{{ med.correo }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12" *ngIf="medicos.length === 0">
+          <div class="alert alert-warning">No hay médicos disponibles para esta especialidad.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 3: Turno -->
+    <div *ngIf="pasoActual === 3 && !cargando">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-semibold mb-0">Paso 3: Seleccione un Turno</h5>
+        <button class="btn btn-outline-secondary btn-sm" (click)="pasoActual = 2">
+          <i class="fas fa-arrow-left me-1"></i>Volver
+        </button>
+      </div>
+      <div class="card-aviva p-3 mb-3">
+        <div class="d-flex align-items-center gap-3">
+          <label class="form-label mb-0 fw-semibold">Fecha:</label>
+          <input type="date" class="form-control w-auto" [(ngModel)]="fechaBusqueda"
+                 fechaMinima (change)="buscarTurnos()" id="input-fecha-busqueda">
+        </div>
+      </div>
+      <div class="row g-2">
+        <div class="col-sm-6 col-md-4 col-lg-3" *ngFor="let turno of turnosDisponibles">
+          <div class="turno-card cursor-pointer"
+               [class.seleccionado]="turnoSeleccionado?.idTurno === turno.idTurno"
+               (click)="seleccionarTurno(turno)"
+               [id]="'turno-' + turno.idTurno">
+            <div class="fw-bold text-primario">{{ turno.horaInicio | slice:0:5 }}</div>
+            <div class="small text-muted">hasta {{ turno.horaFin | slice:0:5 }}</div>
+            <div class="small mt-1">{{ turno.fecha | date:'dd/MM/yyyy':'':'es' }}</div>
+          </div>
+        </div>
+        <div class="col-12" *ngIf="turnosDisponibles.length === 0">
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            No hay turnos disponibles para la fecha seleccionada. Pruebe con otra fecha.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4: Confirmar -->
+    <div *ngIf="pasoActual === 4 && !cargando">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-semibold mb-0">Paso 4: Confirme su Cita</h5>
+        <button class="btn btn-outline-secondary btn-sm" (click)="pasoActual = 3">
+          <i class="fas fa-arrow-left me-1"></i>Volver
+        </button>
+      </div>
+      <div class="card-aviva p-4">
+        <div class="alert alert-success mb-4">
+          <i class="fas fa-check-circle me-2"></i>
+          Revise los detalles de su cita antes de confirmar
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="detalle-item">
+              <div class="small text-muted">Especialidad</div>
+              <div class="fw-semibold">{{ especialidadSeleccionada?.nombre }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="detalle-item">
+              <div class="small text-muted">Médico</div>
+              <div class="fw-semibold">Dr. {{ medicoSeleccionado?.nombres }} {{ medicoSeleccionado?.apellidos }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="detalle-item">
+              <div class="small text-muted">Fecha</div>
+              <div class="fw-semibold">{{ turnoSeleccionado?.fecha | date:'EEEE, dd \'de\' MMMM yyyy':'':'es' }}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="detalle-item">
+              <div class="small text-muted">Hora</div>
+              <div class="fw-semibold">{{ turnoSeleccionado?.horaInicio | slice:0:5 }} – {{ turnoSeleccionado?.horaFin | slice:0:5 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-3">
+          <button class="btn btn-primary px-4 py-2 fw-semibold"
+                  (click)="confirmarReserva()" id="btn-confirmar-reserva" [disabled]="cargando">
+            <span *ngIf="cargando" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!cargando" class="fas fa-calendar-check me-2"></i>
+            {{ cargando ? 'Reservando...' : 'Confirmar Reserva' }}
+          </button>
+          <button class="btn btn-outline-secondary px-4" routerLink="/paciente/mis-citas">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

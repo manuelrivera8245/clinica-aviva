@@ -1,0 +1,75 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Médico" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    <div class="page-header-aviva d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-th-large me-2"></i>Panel del Médico</h2>
+        <p class="text-muted mb-0">Bienvenido, Dr. <strong>{{ nombreMedico }}</strong></p>
+      </div>
+      <a class="btn btn-primary" routerLink="/medico/agenda" id="btn-ver-agenda">
+        <i class="fas fa-calendar-day me-2"></i>Ver Agenda
+      </a>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <div class="row g-3 mb-4" *ngIf="!cargando && dashboardData">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi">
+          <div class="kpi-value">{{ dashboardData.citasHoy }}</div>
+          <div class="kpi-label">Citas Hoy</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color: var(--color-advertencia);">
+          <div class="kpi-value" style="color: var(--color-advertencia);">{{ dashboardData.programadas }}</div>
+          <div class="kpi-label">Pendientes</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color: var(--color-exito);">
+          <div class="kpi-value" style="color: var(--color-exito);">{{ dashboardData.atendidas }}</div>
+          <div class="kpi-label">Atendidas</div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color: var(--color-peligro);">
+          <div class="kpi-value" style="color: var(--color-peligro);">{{ dashboardData.tasaAusentismo | number:'1.0-1' }}%</div>
+          <div class="kpi-label">Ausentismo Hoy</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Próximas citas del día -->
+    <div class="card-aviva" *ngIf="!cargando && dashboardData">
+      <div class="p-3 border-bottom fw-semibold text-primario">
+        <i class="fas fa-calendar-day me-2"></i>Citas de Hoy — {{ dashboardData.citasHoy > 0 ? 'Resumen' : 'Sin citas programadas' }}
+      </div>
+      <div class="table-responsive" *ngIf="dashboardData.citasHoy > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead>
+            <tr><th>Hora</th><th>Paciente</th><th>DNI</th><th>Estado</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of dashboardData.citasDelDia.slice(0,5)">
+              <td class="fw-semibold">{{ c.horaInicio | slice:0:5 }}</td>
+              <td>{{ c.nombrePaciente }}</td>
+              <td class="text-muted">{{ c.dniPaciente }}</td>
+              <td><span class="estado-badge" [ngClass]="c.estado === 'Programada' ? 'estado-programada' : c.estado === 'Atendida' ? 'estado-atendida' : 'estado-no-asistio'">{{ c.estado }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-4 text-center text-muted" *ngIf="dashboardData.citasHoy === 0">
+        <i class="fas fa-calendar-times fa-2x mb-2"></i>
+        <p class="mb-0">No tiene citas programadas para hoy.</p>
+      </div>
+      <div class="p-3 border-top" *ngIf="dashboardData.citasHoy > 0">
+        <a routerLink="/medico/agenda" class="btn btn-sm btn-outline-primary">
+          Ver agenda completa <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+      </div>
+    </div>
+  </main>
+</div>

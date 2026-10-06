@@ -1,0 +1,13 @@
+.user-avatar {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.3rem;
+}
+.dropdown-menu {
+  border: none;
+  border-radius: 0.5rem;
+  min-width: 200px;
+}
+.dropdown-item:hover {
+  background-color: rgba(0, 119, 182, 0.08);
+  color: var(--color-primario);
+}

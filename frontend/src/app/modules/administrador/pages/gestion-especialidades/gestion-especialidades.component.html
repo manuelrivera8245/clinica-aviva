@@ -1,0 +1,97 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Administrativo" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    
+    <!-- Encabezado -->
+    <div class="page-header-aviva d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-stethoscope me-2"></i>Gestión de Especialidades</h2>
+        <p class="text-muted mb-0">{{ especialidades.length }} especialidades registradas</p>
+      </div>
+      <div class="d-flex gap-2">
+        <input type="search" class="form-control w-auto" [(ngModel)]="textoBusqueda"
+               placeholder="Buscar especialidad..." id="buscador-especialidades">
+        <button class="btn btn-primary fw-semibold" (click)="abrirFormulario()">
+          <i class="fas fa-plus me-1"></i> Nueva Especialidad
+        </button>
+      </div>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <!-- Tabla de Especialidades -->
+    <div class="card-aviva" *ngIf="!cargando && !mostrarFormulario">
+      <div class="table-responsive" *ngIf="especialidadesFiltradas.length > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let esp of especialidadesFiltradas">
+              <td class="fw-bold text-muted">#{{ esp.idEspecialidad }}</td>
+              <td class="fw-semibold text-dark">{{ esp.nombre }}</td>
+              <td class="text-muted">{{ esp.descripcion || 'Sin descripción' }}</td>
+              <td>
+                <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2">
+                  <i class="fas fa-check-circle me-1"></i> Activa
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="p-5 text-center text-muted" *ngIf="especialidadesFiltradas.length === 0">
+        <i class="fas fa-search fa-3x mb-3 text-secundario"></i>
+        <p class="fs-5">No se encontraron especialidades.</p>
+        <button class="btn btn-outline-primary mt-2" (click)="textoBusqueda = ''" *ngIf="textoBusqueda">
+          Limpiar búsqueda
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario Nueva Especialidad -->
+    <div class="card-aviva border-0 shadow-sm mx-auto" style="max-width: 600px;" *ngIf="mostrarFormulario">
+      <div class="p-4 bg-light border-bottom rounded-top d-flex justify-content-between align-items-center">
+        <h4 class="fw-bold mb-0 text-dark"><i class="fas fa-plus-circle me-2 text-primario"></i>Nueva Especialidad</h4>
+        <button class="btn-close" (click)="cerrarFormulario()"></button>
+      </div>
+      <div class="p-4">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+          
+          <div class="mb-3">
+            <label for="esp-nombre" class="form-label fw-semibold">Nombre <span class="text-danger">*</span></label>
+            <input type="text" id="esp-nombre" class="form-control form-control-lg" formControlName="nombre"
+                   placeholder="Ej. Cardiología"
+                   [ngClass]="{'is-invalid': form.get('nombre')?.touched && form.get('nombre')?.invalid}">
+            <div class="invalid-feedback">El nombre es obligatorio.</div>
+          </div>
+          
+          <div class="mb-4">
+            <label for="esp-desc" class="form-label fw-semibold">Descripción</label>
+            <textarea id="esp-desc" class="form-control" rows="3" formControlName="descripcion"
+                      placeholder="Breve descripción de la especialidad..."></textarea>
+          </div>
+          
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-light fw-semibold px-4" (click)="cerrarFormulario()" [disabled]="guardando">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary fw-semibold px-4" [disabled]="guardando">
+              <span *ngIf="guardando" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!guardando" class="fas fa-save me-2"></i> {{ guardando ? 'Guardando...' : 'Guardar Especialidad' }}
+            </button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+
+  </main>
+</div>

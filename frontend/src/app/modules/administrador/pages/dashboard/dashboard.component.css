@@ -1,0 +1,7 @@
+/* Columnas de 5 para los KPIs (Bootstrap no tiene col-2-4 nativo) */
+@media (min-width: 992px) {
+  .col-lg-2-4 {
+    flex: 0 0 auto;
+    width: 20%;
+  }
+}

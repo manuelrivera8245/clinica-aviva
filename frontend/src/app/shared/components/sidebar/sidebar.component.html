@@ -1,0 +1,14 @@
+<aside class="sidebar-aviva">
+  <div class="sidebar-section-title">{{ titulo }}</div>
+  <nav>
+    <div
+      *ngFor="let item of items"
+      class="sidebar-link"
+      [class.active]="esActivo(item.ruta)"
+      (click)="navegar(item.ruta)"
+      [id]="'sidebar-' + item.ruta.replace('/', '-').replace('/', '-')">
+      <i class="fas {{ item.icon }}"></i>
+      <span>{{ item.label }}</span>
+    </div>
+  </nav>
+</aside>

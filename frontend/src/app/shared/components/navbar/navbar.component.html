@@ -1,0 +1,155 @@
+<nav class="navbar navbar-expand-lg navbar-aviva sticky-top">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/inicio">
+      <i class="fas fa-heartbeat"></i>
+      <span>Clínica Aviva</span>
+    </a>
+
+    <!-- Hamburger -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarMain" aria-controls="navbarMain"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menú -->
+    <div class="collapse navbar-collapse" id="navbarMain">
+
+      <!-- Links públicos -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/inicio" routerLinkActive="active">
+            <i class="fas fa-home me-1"></i>Inicio
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/nosotros" routerLinkActive="active">
+            <i class="fas fa-info-circle me-1"></i>Nosotros
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/especialidades" routerLinkActive="active">
+            <i class="fas fa-stethoscope me-1"></i>Especialidades
+          </a>
+        </li>
+
+        <!-- Links según rol -->
+        <ng-container *ngIf="isAuthenticated">
+          <!-- Paciente -->
+          <ng-container *ngIf="esPaciente">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/paciente/reservar" routerLinkActive="active">
+                <i class="fas fa-calendar-plus me-1"></i>Reservar Cita
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/paciente/mis-citas" routerLinkActive="active">
+                <i class="fas fa-calendar-check me-1"></i>Mis Citas
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- Médico -->
+          <ng-container *ngIf="esMedico">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/medico/agenda" routerLinkActive="active">
+                <i class="fas fa-calendar-day me-1"></i>Agenda
+              </a>
+            </li>
+          </ng-container>
+
+          <!-- Admin -->
+          <ng-container *ngIf="esAdmin">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/admin/dashboard" routerLinkActive="active">
+                <i class="fas fa-chart-bar me-1"></i>Panel Admin
+              </a>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+
+      <!-- Acciones de usuario -->
+      <ul class="navbar-nav ms-auto align-items-center">
+        <ng-container *ngIf="!isAuthenticated">
+          <li class="nav-item me-2">
+            <a class="nav-link" routerLink="/auth/login" id="btn-login">
+              <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-light text-primario fw-semibold px-3"
+               routerLink="/auth/registro" id="btn-registro">
+              <i class="fas fa-user-plus me-1"></i>Registrarse
+            </a>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="isAuthenticated">
+          <!-- Campana de notificaciones (Solo Pacientes) -->
+          <li class="nav-item dropdown me-3" *ngIf="esPaciente">
+            <a class="nav-link dropdown-toggle position-relative px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" (click)="abrirNotificaciones()">
+              <i class="fas fa-bell fa-lg"></i>
+              <span *ngIf="unreadCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+                {{ unreadCount }}
+                <span class="visually-hidden">notificaciones no leídas</span>
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow notification-dropdown" style="width: 320px; max-height: 400px; overflow-y: auto;">
+              <li class="dropdown-header fw-bold border-bottom">Notificaciones</li>
+              <li *ngIf="notificaciones?.length === 0 || !notificaciones" class="p-3 text-center text-muted small">
+                No tienes notificaciones recientes.
+              </li>
+              <ng-container *ngFor="let n of notificaciones">
+                <li>
+                  <a class="dropdown-item py-2 border-bottom text-wrap" [ngClass]="{'bg-light': !n.leido}">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <strong class="small text-primario">
+                        <i class="fas fa-info-circle me-1" *ngIf="n.tipo === 'Confirmacion'"></i>
+                        <i class="fas fa-clock me-1" *ngIf="n.tipo === 'Recordatorio'"></i>
+                        <i class="fas fa-times-circle me-1 text-danger" *ngIf="n.tipo === 'Cancelacion'"></i>
+                        {{ n.tipo }}
+                      </strong>
+                      <small class="text-muted" style="font-size: 0.7rem;">{{ n.fecha | date:'dd/MM HH:mm' }}</small>
+                    </div>
+                    <span class="small d-block text-secondary" style="line-height: 1.2;">{{ n.mensaje }}</span>
+                  </a>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+
+          <!-- Perfil Usuario -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
+               href="#" role="button" data-bs-toggle="dropdown" id="userDropdown">
+              <div class="user-avatar">
+                <i class="fas fa-user-circle fa-lg"></i>
+              </div>
+              <span class="d-none d-lg-block">{{ nombreMostrado }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow">
+              <li>
+                <a class="dropdown-item" *ngIf="esPaciente" routerLink="/paciente/perfil">
+                  <i class="fas fa-user me-2 text-primario"></i>Mi Perfil
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item cursor-pointer" (click)="irAlDashboard()">
+                  <i class="fas fa-th-large me-2 text-primario"></i>Mi Panel
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button class="dropdown-item text-danger" (click)="logout()" id="btn-logout">
+                  <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                </button>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</nav>

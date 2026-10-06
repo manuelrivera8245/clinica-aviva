@@ -1,0 +1,100 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Administrativo" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-cog me-2"></i>Configuración del Sistema</h2>
+      <p class="text-muted mb-0">Parámetros generales de la Clínica Aviva</p>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <div class="card-aviva p-4" *ngIf="!cargando">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="row g-4">
+
+          <!-- Sección: Datos de la Clínica -->
+          <div class="col-12">
+            <h6 class="fw-bold text-primario mb-3">
+              <i class="fas fa-hospital me-2"></i>Datos de la Clínica
+            </h6>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nombre de la Clínica *</label>
+            <input class="form-control" formControlName="nombreClinica" id="cfg-nombre"
+                   [ngClass]="{'is-invalid': f['nombreClinica'].touched && f['nombreClinica'].invalid}">
+            <div class="invalid-feedback">Requerido.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Dirección *</label>
+            <input class="form-control" formControlName="direccion" id="cfg-direccion"
+                   [ngClass]="{'is-invalid': f['direccion'].touched && f['direccion'].invalid}">
+            <div class="invalid-feedback">Requerido.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Correo de Contacto *</label>
+            <input type="email" class="form-control" formControlName="correoContacto" id="cfg-correo"
+                   [ngClass]="{'is-invalid': f['correoContacto'].touched && f['correoContacto'].invalid}">
+            <div class="invalid-feedback">Correo válido requerido.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Teléfono *</label>
+            <input class="form-control" formControlName="telefonoContacto" id="cfg-telefono"
+                   [ngClass]="{'is-invalid': f['telefonoContacto'].touched && f['telefonoContacto'].invalid}">
+            <div class="invalid-feedback">Requerido.</div>
+          </div>
+
+          <!-- Sección: Horarios -->
+          <div class="col-12 mt-2">
+            <h6 class="fw-bold text-primario mb-3">
+              <i class="fas fa-clock me-2"></i>Horarios de Atención
+            </h6>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Apertura General *</label>
+            <input type="time" class="form-control" formControlName="horarioAperturaGeneral" id="cfg-apertura"
+                   [ngClass]="{'is-invalid': f['horarioAperturaGeneral'].touched && f['horarioAperturaGeneral'].invalid}">
+            <div class="invalid-feedback">Requerido.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cierre General *</label>
+            <input type="time" class="form-control" formControlName="horarioCierreGeneral" id="cfg-cierre"
+                   [ngClass]="{'is-invalid': f['horarioCierreGeneral'].touched && f['horarioCierreGeneral'].invalid}">
+            <div class="invalid-feedback">Requerido.</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Duración Turno (min) *</label>
+            <input type="number" class="form-control" formControlName="duracionTurnoMinutos" id="cfg-duracion" min="10">
+            <small class="text-muted">Mínimo 10 minutos.</small>
+          </div>
+
+          <!-- Sección: Reservas y Cancelaciones -->
+          <div class="col-12 mt-2">
+            <h6 class="fw-bold text-primario mb-3">
+              <i class="fas fa-calendar-alt me-2"></i>Políticas de Reserva y Cancelación
+            </h6>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Días anticipación para reservar *</label>
+            <input type="number" class="form-control" formControlName="diasAnticipacionReserva" id="cfg-anticipacion" min="1">
+            <small class="text-muted">Máximos días en el futuro para reservar.</small>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Días mínimos para cancelar *</label>
+            <input type="number" class="form-control" formControlName="diasMinimosCancelacion" id="cfg-cancelacion" min="0">
+            <small class="text-muted">Horas/días previos requeridos para cancelar.</small>
+          </div>
+
+          <div class="col-12 mt-3">
+            <button type="submit" class="btn btn-primary px-5 py-2 fw-semibold"
+                    id="btn-guardar-config" [disabled]="guardando">
+              <span *ngIf="guardando" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!guardando" class="fas fa-save me-2"></i>
+              {{ guardando ? 'Guardando...' : 'Guardar Configuración' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

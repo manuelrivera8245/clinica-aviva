@@ -1,0 +1,104 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Paciente" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+
+    <!-- Header -->
+    <div class="page-header-aviva d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-th-large me-2"></i>Mi Panel</h2>
+        <p class="text-muted mb-0">Bienvenido, <strong>{{ usuario?.nombres }} {{ usuario?.apellidos }}</strong></p>
+      </div>
+      <a class="btn btn-primary" routerLink="/paciente/reservar" id="btn-nueva-cita">
+        <i class="fas fa-calendar-plus me-2"></i>Nueva Cita
+      </a>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <!-- KPIs -->
+    <div class="row g-3 mb-4" *ngIf="!cargando">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi">
+          <div class="kpi-value">{{ citasProgramadas.length }}</div>
+          <div class="kpi-label">Citas Programadas</div>
+          <i class="fas fa-calendar-check text-muted mt-2"></i>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card-kpi" style="border-left-color: var(--color-exito);">
+          <div class="kpi-value" style="color: var(--color-exito);">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="kpi-label">Sistema Activo 24/7</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Próxima cita -->
+    <div class="card-aviva p-4 mb-4" *ngIf="proximaCita">
+      <h5 class="fw-semibold mb-3">
+        <i class="fas fa-clock me-2 text-primario"></i>Próxima Cita
+      </h5>
+      <div class="row g-3">
+        <div class="col-md-3 text-center">
+          <div class="fecha-grande">
+            {{ proximaCita.fechaCita | date:'d' }}
+          </div>
+          <div class="mes-texto">{{ proximaCita.fechaCita | date:'MMMM yyyy':'':'es' }}</div>
+        </div>
+        <div class="col-md-9">
+          <div class="row g-2">
+            <div class="col-sm-6">
+              <div class="small text-muted">Médico</div>
+              <div class="fw-semibold">Dr. {{ proximaCita.nombreMedico }}</div>
+            </div>
+            <div class="col-sm-6">
+              <div class="small text-muted">Especialidad</div>
+              <div class="fw-semibold">{{ proximaCita.nombreEspecialidad }}</div>
+            </div>
+            <div class="col-sm-6">
+              <div class="small text-muted">Hora</div>
+              <div class="fw-semibold">
+                {{ proximaCita.horaInicio | slice:0:5 }} – {{ proximaCita.horaFin | slice:0:5 }}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="small text-muted">Estado</div>
+              <span class="estado-badge estado-programada">Programada</span>
+            </div>
+          </div>
+          <div class="mt-3">
+            <a class="btn btn-sm btn-outline-primary me-2" routerLink="/paciente/mis-citas">
+              Ver detalle
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sin citas -->
+    <div class="card-aviva p-5 text-center" *ngIf="!cargando && !proximaCita">
+      <i class="fas fa-calendar-plus fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">No tienes citas programadas</h5>
+      <p class="text-muted small mb-3">Reserva tu primera cita médica de forma rápida y sencilla</p>
+      <a class="btn btn-primary" routerLink="/paciente/reservar" id="btn-primera-cita">
+        <i class="fas fa-calendar-plus me-2"></i>Reservar Cita
+      </a>
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="row g-3 mt-2">
+      <div class="col-sm-6 col-lg-3" *ngFor="let item of menuItems.slice(1)">
+        <a class="card-aviva p-3 d-flex align-items-center gap-3 text-decoration-none"
+           [routerLink]="item.ruta">
+          <div class="icono-acceso">
+            <i class="fas {{ item.icon }}"></i>
+          </div>
+          <span class="fw-semibold text-texto">{{ item.label }}</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>

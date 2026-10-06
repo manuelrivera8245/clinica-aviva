@@ -1,0 +1,27 @@
+<router-outlet></router-outlet>
+
+<!-- Toast Container Global -->
+<div class="toast-container-aviva">
+  <div
+    *ngFor="let toast of toasts; let i = index"
+    class="toast-aviva d-flex justify-content-between align-items-center"
+    [ngClass]="{
+      'toast-exito':   toast.tipo === 'exito',
+      'toast-peligro': toast.tipo === 'error',
+      'toast-info':    toast.tipo === 'info',
+      'toast-warning': toast.tipo === 'warning'
+    }">
+    <div class="d-flex align-items-center gap-2">
+      <i class="fas"
+        [ngClass]="{
+          'fa-check-circle':       toast.tipo === 'exito',
+          'fa-times-circle':       toast.tipo === 'error',
+          'fa-info-circle':        toast.tipo === 'info',
+          'fa-exclamation-triangle': toast.tipo === 'warning'
+        }">
+      </i>
+      <span>{{ toast.mensaje }}</span>
+    </div>
+    <button type="button" class="btn-close btn-close-white ms-3" (click)="removeToast(i)"></button>
+  </div>
+</div>

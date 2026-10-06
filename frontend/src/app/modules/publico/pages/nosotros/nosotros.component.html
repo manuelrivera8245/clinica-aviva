@@ -1,0 +1,86 @@
+<app-navbar></app-navbar>
+
+<!-- Header -->
+<section class="hero-aviva py-4" style="min-height: auto;">
+  <div class="container py-3">
+    <h1 class="mb-2">Sobre {{ config.nombreClinica }}</h1>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a routerLink="/inicio" class="text-white-50">Inicio</a></li>
+        <li class="breadcrumb-item active text-white">Nosotros</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Misión -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="d-inline-block bg-primario text-white rounded px-3 py-1 small fw-semibold mb-3">
+          NUESTRA MISIÓN
+        </div>
+        <h2 class="fw-bold mb-3">Cuidando tu salud con tecnología y compromiso</h2>
+        <p class="text-muted">
+          La Clínica Aviva nace con el propósito de modernizar la gestión de citas médicas
+          y eliminar las barreras que impiden a los pacientes acceder a atención oportuna.
+          Nuestro sistema de autogestión 24/7 reduce el ausentismo médico del 30–35% promedio
+          del sector y garantiza una experiencia fluida para pacientes, médicos y administradores.
+        </p>
+        <div class="row g-3 mt-2">
+          <div class="col-6" *ngFor="let v of valores">
+            <div class="d-flex align-items-start gap-2">
+              <i class="fas {{ v.icono }} text-primario mt-1"></i>
+              <div>
+                <div class="fw-semibold small">{{ v.titulo }}</div>
+                <div class="text-muted" style="font-size: 0.8rem;">{{ v.desc }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card-aviva p-4">
+          <h5 class="fw-bold text-primario mb-4">
+            <i class="fas fa-info-circle me-2"></i>Información de Contacto
+          </h5>
+          <ul class="list-unstyled mb-0">
+            <li class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+              <div class="icono-info"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <div class="small text-muted">Dirección</div>
+                <div class="fw-semibold">{{ config.direccion }}</div>
+              </div>
+            </li>
+            <li class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+              <div class="icono-info"><i class="fas fa-phone"></i></div>
+              <div>
+                <div class="small text-muted">Teléfono</div>
+                <div class="fw-semibold">{{ config.telefonoContacto }}</div>
+              </div>
+            </li>
+            <li class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+              <div class="icono-info"><i class="fas fa-envelope"></i></div>
+              <div>
+                <div class="small text-muted">Correo</div>
+                <div class="fw-semibold">{{ config.correoContacto }}</div>
+              </div>
+            </li>
+            <li class="d-flex align-items-center gap-3">
+              <div class="icono-info"><i class="fas fa-clock"></i></div>
+              <div>
+                <div class="small text-muted">Horario de atención</div>
+                <div class="fw-semibold">
+                  Lun – Sáb: {{ config.horarioAperturaGeneral }} – {{ config.horarioCierreGeneral }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>

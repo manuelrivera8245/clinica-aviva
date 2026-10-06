@@ -1,0 +1,38 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Médico" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-history me-2"></i>Historial de Atenciones</h2>
+      <p class="text-muted mb-0">Registro completo de todas sus citas</p>
+    </div>
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+    <!-- KPIs -->
+    <div class="row g-3 mb-4" *ngIf="!cargando">
+      <div class="col-6 col-lg-3"><div class="card-kpi"><div class="kpi-value">{{ citas.length }}</div><div class="kpi-label">Total Citas</div></div></div>
+      <div class="col-6 col-lg-3"><div class="card-kpi" style="border-left-color:var(--color-exito);"><div class="kpi-value" style="color:var(--color-exito);">{{ atendidas }}</div><div class="kpi-label">Atendidas</div></div></div>
+      <div class="col-6 col-lg-3"><div class="card-kpi" style="border-left-color:var(--color-advertencia);"><div class="kpi-value" style="color:var(--color-advertencia);">{{ noAsistio }}</div><div class="kpi-label">No Asistieron</div></div></div>
+      <div class="col-6 col-lg-3"><div class="card-kpi" style="border-left-color:var(--color-peligro);"><div class="kpi-value" style="color:var(--color-peligro);">{{ tasaAusentismo }}</div><div class="kpi-label">Tasa Ausentismo</div></div></div>
+    </div>
+    <div class="card-aviva" *ngIf="!cargando">
+      <div class="table-responsive" *ngIf="citas.length > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead><tr><th>Fecha</th><th>Hora</th><th>Paciente</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let c of citas">
+              <td>{{ c.fechaCita | date:'dd/MM/yyyy':'':'es' }}</td>
+              <td>{{ c.horaInicio | slice:0:5 }}</td>
+              <td>{{ c.nombrePaciente }}</td>
+              <td><span class="estado-badge" [ngClass]="{
+                'estado-programada': c.estado==='Programada',
+                'estado-atendida':   c.estado==='Atendida',
+                'estado-no-asistio': c.estado==='No Asistio',
+                'estado-cancelada':  c.estado==='Cancelada'
+              }">{{ c.estado }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>

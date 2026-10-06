@@ -1,0 +1,9 @@
+.fecha-grande { font-size: 3rem; font-weight: 700; color: var(--color-primario); line-height: 1; }
+.mes-texto { color: #6c757d; font-size: 0.9rem; }
+.icono-acceso {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 1.1rem; min-width: 44px;
+}
+.text-texto { color: var(--color-texto); }

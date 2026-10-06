@@ -1,0 +1,46 @@
+<!-- Overlay -->
+<div class="modal-overlay" *ngIf="visible" (click)="cancelar()"></div>
+
+<!-- Modal -->
+<div class="modal-aviva" *ngIf="visible" role="dialog" aria-modal="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg">
+      <div class="modal-header border-0 pb-0">
+        <div class="modal-icon"
+          [ngClass]="{
+            'text-danger':  tipo === 'peligro',
+            'text-warning': tipo === 'advertencia',
+            'text-primario': tipo === 'primario'
+          }">
+          <i class="fas"
+            [ngClass]="{
+              'fa-exclamation-triangle': tipo === 'peligro' || tipo === 'advertencia',
+              'fa-question-circle':      tipo === 'primario'
+            }"
+            style="font-size: 2.5rem;">
+          </i>
+        </div>
+        <button type="button" class="btn-close" (click)="cancelar()" id="btn-modal-cerrar"></button>
+      </div>
+      <div class="modal-body text-center py-2">
+        <h5 class="modal-title fw-bold">{{ titulo }}</h5>
+        <p class="text-muted mt-2 mb-0">{{ mensaje }}</p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center gap-3">
+        <button type="button" class="btn btn-outline-secondary px-4"
+                (click)="cancelar()" id="btn-modal-no">
+          <i class="fas fa-times me-1"></i>{{ textoNo }}
+        </button>
+        <button type="button" class="btn px-4"
+                [ngClass]="{
+                  'btn-danger':   tipo === 'peligro',
+                  'btn-warning':  tipo === 'advertencia',
+                  'btn-primary':  tipo === 'primario'
+                }"
+                (click)="confirmar()" id="btn-modal-si">
+          <i class="fas fa-check me-1"></i>{{ textoSi }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

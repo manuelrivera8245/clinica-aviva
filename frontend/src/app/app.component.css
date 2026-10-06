@@ -1,0 +1,6 @@
+/* Root component — estilos mínimos (los globales están en styles.css) */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

@@ -1,0 +1,6 @@
+.avatar-perfil {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto;
+}

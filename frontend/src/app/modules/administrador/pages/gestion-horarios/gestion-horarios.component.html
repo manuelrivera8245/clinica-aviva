@@ -1,0 +1,188 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Admin" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+
+    <!-- Encabezado -->
+    <div class="page-header-aviva d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-calendar-alt me-2"></i>Gestión de Horarios</h2>
+        <p class="text-muted mb-0">Configure los horarios de atención y genere turnos automáticamente</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-success" (click)="mostrarFormGenerar = !mostrarFormGenerar" id="btn-abrir-generar">
+          <i class="fas fa-magic me-2"></i>Generar Turnos
+        </button>
+        <button class="btn btn-primary" (click)="mostrarFormHorario = !mostrarFormHorario" id="btn-abrir-horario">
+          <i class="fas fa-plus me-2"></i>Nuevo Horario
+        </button>
+      </div>
+    </div>
+
+    <!-- Formulario: Generar Turnos en Lote -->
+    <div class="card-aviva mb-4" *ngIf="mostrarFormGenerar">
+      <h5 class="fw-bold mb-4"><i class="fas fa-magic me-2 text-success"></i>Generar Turnos Automáticamente</h5>
+      <p class="text-muted small mb-3">
+        El sistema leerá los horarios configurados del médico y creará todos los turnos disponibles
+        en el rango de fechas indicado, respetando los días de la semana y la duración de cada turno.
+      </p>
+      <form [formGroup]="formGenerar" (ngSubmit)="generarTurnos()">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Médico</label>
+            <select class="form-select" formControlName="idMedico" id="gen-medico"
+                    [class.is-invalid]="fg['idMedico'].invalid && fg['idMedico'].touched">
+              <option [ngValue]="null" disabled>— Seleccionar médico —</option>
+              <option *ngFor="let m of medicos" [value]="m.idMedico">{{ m.nombres }} {{ m.apellidos }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione un médico</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Fecha Desde</label>
+            <input type="date" class="form-control" formControlName="fechaDesde" id="gen-desde"
+                   [class.is-invalid]="fg['fechaDesde'].invalid && fg['fechaDesde'].touched">
+            <div class="invalid-feedback">Campo requerido</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Fecha Hasta</label>
+            <input type="date" class="form-control" formControlName="fechaHasta" id="gen-hasta"
+                   [class.is-invalid]="fg['fechaHasta'].invalid && fg['fechaHasta'].touched">
+            <div class="invalid-feedback">Campo requerido</div>
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-success w-100" [disabled]="generando" id="btn-generar-submit">
+              <span *ngIf="generando" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="fas fa-magic me-1" *ngIf="!generando"></i>
+              {{ generando ? 'Generando...' : 'Generar' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Formulario: Crear Horario -->
+    <div class="card-aviva mb-4" *ngIf="mostrarFormHorario">
+      <h5 class="fw-bold mb-4"><i class="fas fa-plus-circle me-2 text-primary"></i>Nuevo Horario</h5>
+      <form [formGroup]="formHorario" (ngSubmit)="guardarHorario()">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Médico</label>
+            <select class="form-select" formControlName="idMedico" id="h-medico"
+                    [class.is-invalid]="fh['idMedico'].invalid && fh['idMedico'].touched">
+              <option [ngValue]="null" disabled>— Seleccionar —</option>
+              <option *ngFor="let m of medicos" [value]="m.idMedico">{{ m.nombres }} {{ m.apellidos }}</option>
+            </select>
+            <div class="invalid-feedback">Requerido</div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Día</label>
+            <select class="form-select" formControlName="diaSemana" id="h-dia"
+                    [class.is-invalid]="fh['diaSemana'].invalid && fh['diaSemana'].touched">
+              <option [ngValue]="null" disabled>— Día —</option>
+              <option *ngFor="let d of diasSemana" [value]="d.valor">{{ d.nombre }}</option>
+            </select>
+            <div class="invalid-feedback">Requerido</div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Hora Inicio</label>
+            <input type="time" class="form-control" formControlName="horaInicio" id="h-inicio"
+                   [class.is-invalid]="fh['horaInicio'].invalid && fh['horaInicio'].touched">
+            <div class="invalid-feedback">Requerido</div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Hora Fin</label>
+            <input type="time" class="form-control" formControlName="horaFin" id="h-fin"
+                   [class.is-invalid]="fh['horaFin'].invalid && fh['horaFin'].touched">
+            <div class="invalid-feedback">Requerido</div>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold">Duración (min)</label>
+            <input type="number" class="form-control" formControlName="duracionTurnoMin"
+                   id="h-duracion" min="15" max="120" step="5"
+                   [class.is-invalid]="fh['duracionTurnoMin'].invalid && fh['duracionTurnoMin'].touched">
+            <div class="invalid-feedback">Entre 15 y 120 min</div>
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100" id="btn-horario-submit">
+              <i class="fas fa-save"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Selector de médico para ver sus horarios -->
+    <div class="card-aviva mb-3">
+      <div class="d-flex align-items-center gap-3">
+        <label class="fw-semibold mb-0">Ver horarios de:</label>
+        <select class="form-select w-auto" id="select-medico-ver"
+                (change)="seleccionarMedico(+$any($event.target).value)">
+          <option value="">— Seleccionar médico —</option>
+          <option *ngFor="let m of medicos" [value]="m.idMedico">{{ m.nombres }} {{ m.apellidos }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Tabla de horarios del médico seleccionado -->
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <div class="card-aviva" *ngIf="!cargando && medicoSeleccionado">
+      <div class="table-responsive" *ngIf="horarios.length > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Médico</th>
+              <th>Día</th>
+              <th>Hora Inicio</th>
+              <th>Hora Fin</th>
+              <th>Duración slot</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of horarios">
+              <td>{{ h.nombreMedico }}</td>
+              <td><span class="badge bg-primary px-3 py-2">{{ h.diaNombre }}</span></td>
+              <td class="fw-semibold">{{ h.horaInicio }}</td>
+              <td class="fw-semibold">{{ h.horaFin }}</td>
+              <td>{{ h.duracionTurnoMin }} min</td>
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm"
+                        (click)="confirmarEliminar(h)"
+                        [id]="'btn-eliminar-horario-' + h.idHorario"
+                        title="Eliminar horario">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-center py-5" *ngIf="horarios.length === 0">
+        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">Este médico no tiene horarios configurados</h5>
+        <button class="btn btn-primary mt-2" (click)="mostrarFormHorario = true" id="btn-crear-primer-horario">
+          <i class="fas fa-plus me-2"></i>Crear primer horario
+        </button>
+      </div>
+    </div>
+
+    <!-- Mensaje inicial -->
+    <div class="card-aviva text-center py-5" *ngIf="!cargando && !medicoSeleccionado">
+      <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+      <p class="text-muted">Selecciona un médico para ver y gestionar sus horarios</p>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <app-confirm-modal
+      [visible]="mostrarModal"
+      titulo="Eliminar Horario"
+      [mensaje]="'¿Eliminar el horario del ' + horarioAEliminar?.diaNombre + ' de ' + horarioAEliminar?.horaInicio + ' a ' + horarioAEliminar?.horaFin + '?'"
+      textoSi="Sí, Eliminar"
+      textoNo="Cancelar"
+      tipo="peligro"
+      (confirmado)="onConfirmacion($event)">
+    </app-confirm-modal>
+
+  </main>
+</div>

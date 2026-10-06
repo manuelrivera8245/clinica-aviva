@@ -1,0 +1,117 @@
+<app-navbar></app-navbar>
+
+<!-- HERO -->
+<section class="hero-aviva">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="badge bg-white text-primario mb-3 px-3 py-2 rounded-pill fw-semibold">
+          <i class="fas fa-shield-alt me-1"></i> Sistema de Gestión de Citas UCH
+        </div>
+        <h1>Tu salud, nuestra <span style="color: #7ed8f6;">prioridad</span></h1>
+        <p class="mt-3 mb-4" style="color: rgba(255,255,255,0.85); font-size: 1.1rem;">
+          Reserva tu cita médica en minutos, sin filas, las 24 horas del día.
+          Accede a más de 10 especialidades con los mejores médicos.
+        </p>
+        <div class="d-flex flex-wrap gap-3">
+          <button class="btn btn-light text-primario fw-bold px-4 py-2"
+                  id="btn-hero-reservar" (click)="irAReservar()">
+            <i class="fas fa-calendar-plus me-2"></i>Reservar Cita
+          </button>
+          <a class="btn btn-outline-light px-4 py-2" routerLink="/nosotros">
+            <i class="fas fa-info-circle me-2"></i>Conocer más
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block text-center">
+        <div class="hero-image-placeholder">
+          <i class="fas fa-hospital" style="font-size: 8rem; color: rgba(255,255,255,0.2);"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESTADÍSTICAS -->
+<section class="py-4" style="background: var(--color-primario);">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-6 col-md-3" *ngFor="let stat of estadisticas">
+        <div class="text-center text-white">
+          <i class="fas {{ stat.icono }} fa-2x mb-2" style="color: rgba(255,255,255,0.7);"></i>
+          <div class="fw-bold fs-3">{{ stat.valor }}</div>
+          <div class="small" style="color: rgba(255,255,255,0.75);">{{ stat.etiqueta }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALIDADES -->
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="section-title">Nuestras Especialidades</h2>
+      <p class="section-subtitle">Atención médica de calidad en las principales especialidades</p>
+    </div>
+    <div class="row g-3">
+      <div class="col-sm-6 col-lg-4" *ngFor="let esp of especialidades">
+        <div class="card-aviva p-3 d-flex align-items-center gap-3 cursor-pointer"
+             routerLink="/especialidades">
+          <div class="icono-especialidad">
+            <i class="fas fa-stethoscope"></i>
+          </div>
+          <div>
+            <h6 class="mb-1 fw-semibold">{{ esp.nombre }}</h6>
+            <small class="text-muted">{{ esp.descripcion | slice:0:60 }}...</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a class="btn btn-outline-primary px-4" routerLink="/especialidades">
+        <i class="fas fa-arrow-right me-2"></i>Ver todas las especialidades
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="py-5" style="background: var(--color-fondo);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="section-title">¿Cómo funciona?</h2>
+      <p class="section-subtitle">Reserva tu cita en 4 simples pasos</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-3 text-center" *ngFor="let paso of [
+        {num:'1', titulo:'Regístrate', desc:'Crea tu cuenta con tu DNI y datos personales', icono:'fa-user-plus'},
+        {num:'2', titulo:'Elige especialidad', desc:'Selecciona la especialidad médica que necesitas', icono:'fa-stethoscope'},
+        {num:'3', titulo:'Escoge tu horario', desc:'Elige el médico y el turno disponible que más te convenga', icono:'fa-calendar-check'},
+        {num:'4', titulo:'¡Listo!', desc:'Recibirás una confirmación y recordatorio de tu cita', icono:'fa-check-circle'}
+      ]">
+        <div class="card-aviva p-4">
+          <div class="paso-numero">{{ paso.num }}</div>
+          <i class="fas {{ paso.icono }} fa-2x text-primario mt-3 mb-2"></i>
+          <h5 class="fw-semibold">{{ paso.titulo }}</h5>
+          <p class="text-muted small mb-0">{{ paso.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="py-5" style="background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));">
+  <div class="container text-center text-white">
+    <h2 class="fw-bold mb-3">¿Listo para cuidar tu salud?</h2>
+    <p class="mb-4" style="color: rgba(255,255,255,0.85);">
+      Únete a más de 500 pacientes que ya gestionan sus citas médicas en línea
+    </p>
+    <button class="btn btn-light text-primario fw-bold px-5 py-2" (click)="irAReservar()" id="btn-cta-final">
+      <i class="fas fa-calendar-plus me-2"></i>Comenzar ahora
+    </button>
+  </div>
+</section>
+
+<app-footer></app-footer>

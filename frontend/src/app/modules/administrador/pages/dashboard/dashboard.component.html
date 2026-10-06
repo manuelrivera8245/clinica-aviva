@@ -1,0 +1,139 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Administrativo" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-chart-bar me-2"></i>Panel Administrativo</h2>
+      <p class="text-muted mb-0">Resumen general del sistema Clínica Aviva</p>
+    </div>
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <!-- KPIs -->
+    <div class="row g-3 mb-4" *ngIf="data && !cargando">
+      <div class="col-6 col-lg-2-4">
+        <div class="card-kpi">
+          <div class="kpi-value">{{ data.totalCitas }}</div>
+          <div class="kpi-label">Total Citas</div>
+          <i class="fas fa-calendar-check text-muted mt-1"></i>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2-4">
+        <div class="card-kpi" style="border-left-color:var(--color-exito)">
+          <div class="kpi-value" style="color:var(--color-exito)">{{ data.totalPacientes }}</div>
+          <div class="kpi-label">Pacientes</div>
+          <i class="fas fa-users text-muted mt-1"></i>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2-4">
+        <div class="card-kpi" style="border-left-color:#7c3aed">
+          <div class="kpi-value" style="color:#7c3aed">{{ data.totalMedicos }}</div>
+          <div class="kpi-label">Médicos</div>
+          <i class="fas fa-user-md text-muted mt-1"></i>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2-4">
+        <div class="card-kpi" style="border-left-color:var(--color-secundario)">
+          <div class="kpi-value" style="color:var(--color-secundario)">{{ data.citasHoy }}</div>
+          <div class="kpi-label">Citas Hoy</div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-2-4">
+        <div class="card-kpi" style="border-left-color:var(--color-advertencia)">
+          <div class="kpi-value" style="color:var(--color-advertencia)">{{ data.tasaAusentismo | number:'1.1-1' }}%</div>
+          <div class="kpi-label">Ausentismo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de citas por estado -->
+    <div class="row g-4" *ngIf="data && !cargando">
+      <div class="col-12">
+        <div class="card-aviva p-4">
+          <h5 class="fw-semibold mb-3"><i class="fas fa-table me-2 text-primario"></i>Citas por Estado</h5>
+          <div class="table-responsive">
+            <table class="table table-aviva mb-0">
+              <thead><tr><th>Estado</th><th>Cantidad</th><th>Proporción</th></tr></thead>
+              <tbody>
+                <tr *ngFor="let item of data.citasPorEstado">
+                  <td>
+                    <span class="estado-badge" [ngClass]="{
+                      'estado-programada': item.estado==='Programada',
+                      'estado-atendida':   item.estado==='Atendida',
+                      'estado-no-asistio': item.estado==='No Asistio',
+                      'estado-cancelada':  item.estado==='Cancelada'
+                    }">{{ item.estado }}</span>
+                  </td>
+                  <td class="fw-semibold">{{ item.cantidad }}</td>
+                  <td>
+                    <div class="progress" style="height:8px; width: 180px;">
+                      <div class="progress-bar bg-primary" role="progressbar"
+                           [style.width.%]="(item.cantidad / data!.totalCitas) * 100"></div>
+                    </div>
+                    <small class="text-muted">{{ (item.cantidad / data!.totalCitas * 100) | number:'1.0-1' }}%</small>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monitor de citas del día (GAP-07: datos ya enviados por el backend) -->
+      <div class="col-12" *ngIf="data.citasDelDia && data.citasDelDia.length > 0">
+        <div class="card-aviva">
+          <div class="p-3 border-bottom fw-semibold text-primario d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-calendar-day me-2"></i>Monitor — Citas de Hoy</span>
+            <span class="badge bg-primary rounded-pill">{{ data.citasDelDia.length }} citas</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-aviva table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Hora</th>
+                  <th>Paciente</th>
+                  <th>DNI</th>
+                  <th>Médico</th>
+                  <th>Especialidad</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let c of data.citasDelDia">
+                  <td class="fw-semibold">{{ c.horaInicio | slice:0:5 }}</td>
+                  <td>{{ c.nombrePaciente }}</td>
+                  <td class="text-muted">{{ c.dniPaciente }}</td>
+                  <td>Dr. {{ c.nombreMedico }}</td>
+                  <td>{{ c.nombreEspecialidad }}</td>
+                  <td>
+                    <span class="estado-badge" [ngClass]="{
+                      'estado-programada': c.estado==='Programada',
+                      'estado-atendida':   c.estado==='Atendida',
+                      'estado-no-asistio': c.estado==='No Asistio',
+                      'estado-cancelada':  c.estado==='Cancelada'
+                    }">{{ c.estado }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accesos rápidos -->
+      <div class="col-12">
+        <h5 class="fw-semibold mb-3">Accesos Rápidos</h5>
+        <div class="row g-3">
+          <div class="col-sm-6 col-lg-4" *ngFor="let item of menuItems.slice(1)">
+            <a class="card-aviva p-3 d-flex align-items-center gap-3 text-decoration-none" [routerLink]="item.ruta">
+              <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--color-primario),var(--color-secundario));display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;">
+                <i class="fas {{ item.icon }}"></i>
+              </div>
+              <span class="fw-semibold" style="color:var(--color-texto)">{{ item.label }}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: clinica-aviva-backend
+
+  # Configuracion de JPA / Hibernate
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  # Configuracion de Jackson (serializacion JSON)
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+
+  # Configuracion de DataSource (MySQL local)
+  datasource:
+    url: jdbc:mysql://localhost:3306/clinica_aviva?useSSL=false&serverTimezone=America/Lima&allowPublicKeyRetrieval=true
+    username: root
+    password: 8245
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # Configuracion de servlet
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+      add-mappings: true
+
+# Configuracion del servidor
+server:
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    whitelabel:
+      enabled: false
+
+# Configuracion de JWT
+jwt:
+  secret: clinicaAvivaSecretKey2026JWTTokenSeguroParaAutenticacionConSpringBootYHS512SuperSeguraClaveLarga
+  expiration: 86400000
+
+# Logging — DEBUG solo para el paquete del proyecto
+logging:
+  level:
+    com.clinicaaviva: DEBUG
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

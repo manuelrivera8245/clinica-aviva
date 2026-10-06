@@ -1,0 +1,83 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Paciente" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+
+    <div class="page-header-aviva d-flex justify-content-between align-items-center">
+      <div>
+        <h2><i class="fas fa-calendar-check me-2"></i>Mis Citas Programadas</h2>
+        <p class="text-muted mb-0">Citas con estado "Programada" activas</p>
+      </div>
+      <a class="btn btn-primary" routerLink="/paciente/reservar" id="btn-nueva-cita">
+        <i class="fas fa-plus me-2"></i>Nueva Cita
+      </a>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <!-- Tabla -->
+    <div class="card-aviva" *ngIf="!cargando">
+      <div class="table-responsive" *ngIf="citas.length > 0">
+        <table class="table table-aviva table-hover mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Médico</th>
+              <th>Especialidad</th>
+              <th>Estado</th>
+              <th class="text-center">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cita of citas; let i = index">
+              <td class="text-muted small">{{ i + 1 }}</td>
+              <td class="fw-semibold">{{ cita.fechaCita | date:'dd/MM/yyyy':'':'es' }}</td>
+              <td>{{ cita.horaInicio | slice:0:5 }} – {{ cita.horaFin | slice:0:5 }}</td>
+              <td>Dr. {{ cita.nombreMedico }}</td>
+              <td>{{ cita.nombreEspecialidad }}</td>
+              <td>
+                <span class="estado-badge estado-programada">Programada</span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm me-1"
+                        (click)="abrirModalCancelar(cita)"
+                        [id]="'btn-cancelar-' + cita.idCita">
+                  <i class="fas fa-times me-1"></i>Cancelar
+                </button>
+                <button class="btn btn-outline-primary btn-sm"
+                        (click)="descargarPDF(cita)"
+                        [title]="'Descargar comprobante'"
+                        [id]="'btn-comprobante-' + cita.idCita">
+                  <i class="fas fa-file-pdf"></i> PDF
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sin citas -->
+      <div class="text-center py-5" *ngIf="citas.length === 0">
+        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+        <h5 class="text-muted">No tienes citas programadas</h5>
+        <a class="btn btn-primary mt-2" routerLink="/paciente/reservar">
+          <i class="fas fa-calendar-plus me-2"></i>Reservar una cita
+        </a>
+      </div>
+    </div>
+
+    <!-- Modal de confirmación de cancelación -->
+    <app-confirm-modal
+      [visible]="mostrarModal"
+      titulo="Cancelar Cita"
+      [mensaje]="'¿Está seguro de cancelar la cita del ' + (citaACancelar?.fechaCita | date:'dd/MM/yyyy') + ' con Dr. ' + citaACancelar?.nombreMedico + '? Recuerde que solo puede cancelar con más de 24 horas de anticipación.'"
+      textoSi="Sí, Cancelar"
+      textoNo="No, Mantener"
+      tipo="peligro"
+      (confirmado)="onConfirmacion($event)">
+    </app-confirm-modal>
+
+  </main>
+</div>

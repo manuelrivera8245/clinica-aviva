@@ -1,0 +1,72 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Portal Paciente" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-user me-2"></i>Mi Perfil</h2>
+      <p class="text-muted mb-0">Actualiza tus datos personales</p>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <div class="row g-4" *ngIf="!cargando">
+      <!-- Avatar lateral -->
+      <div class="col-lg-3">
+        <div class="card-aviva p-4 text-center">
+          <div class="avatar-perfil mb-3">
+            <i class="fas fa-user fa-3x text-white"></i>
+          </div>
+          <h6 class="fw-semibold mb-0">{{ paciente?.nombres }} {{ paciente?.apellidos }}</h6>
+          <p class="text-muted small mb-0">Paciente</p>
+          <hr>
+          <p class="small mb-1"><strong>DNI:</strong> {{ paciente?.dni }}</p>
+          <p class="small mb-1"><strong>Registro:</strong> {{ paciente?.fechaRegistro | date:'dd/MM/yyyy':'':'es' }}</p>
+          <span class="badge bg-success">Activo</span>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <div class="col-lg-9">
+        <div class="card-aviva p-4">
+          <h5 class="fw-semibold mb-4">Datos Personales</h5>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="p-nombres" class="form-label">Nombres <span class="text-danger">*</span></label>
+                <input type="text" id="p-nombres" class="form-control" formControlName="nombres"
+                       [ngClass]="{'is-invalid': f['nombres'].touched && f['nombres'].invalid}">
+                <div class="invalid-feedback">Los nombres son obligatorios.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="p-apellidos" class="form-label">Apellidos <span class="text-danger">*</span></label>
+                <input type="text" id="p-apellidos" class="form-control" formControlName="apellidos"
+                       [ngClass]="{'is-invalid': f['apellidos'].touched && f['apellidos'].invalid}">
+                <div class="invalid-feedback">Los apellidos son obligatorios.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="p-correo" class="form-label">Correo <span class="text-danger">*</span></label>
+                <input type="email" id="p-correo" class="form-control" formControlName="correo"
+                       [ngClass]="{'is-invalid': f['correo'].touched && f['correo'].invalid}">
+                <div class="invalid-feedback">Ingrese un correo válido.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="p-telefono" class="form-label">Teléfono</label>
+                <input type="tel" id="p-telefono" class="form-control"
+                       formControlName="telefono" soloNumeros maxlength="15">
+              </div>
+              <div class="col-12 mt-2">
+                <button type="submit" class="btn btn-primary px-4" id="btn-guardar-perfil" [disabled]="guardando">
+                  <span *ngIf="guardando" class="spinner-border spinner-border-sm me-2"></span>
+                  <i *ngIf="!guardando" class="fas fa-save me-2"></i>
+                  {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

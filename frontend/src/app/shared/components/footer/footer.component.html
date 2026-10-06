@@ -1,0 +1,74 @@
+<footer class="footer-aviva">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Columna Brand -->
+      <div class="col-lg-4">
+        <h5 class="d-flex align-items-center gap-2 mb-3">
+          <i class="fas fa-heartbeat text-secundario"></i>
+          {{ config.nombreClinica }}
+        </h5>
+        <p class="small" style="color: rgba(255,255,255,0.6); line-height: 1.7;">
+          Sistema de gestión de citas médicas disponible las 24 horas del día para
+          reducir el ausentismo y mejorar tu atención médica.
+        </p>
+      </div>
+
+      <!-- Columna Accesos -->
+      <div class="col-lg-2 col-6">
+        <h6 class="text-white mb-3 fw-semibold">Accesos</h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-1"><a routerLink="/inicio"><i class="fas fa-chevron-right fa-xs me-1"></i>Inicio</a></li>
+          <li class="mb-1"><a routerLink="/nosotros"><i class="fas fa-chevron-right fa-xs me-1"></i>Nosotros</a></li>
+          <li class="mb-1"><a routerLink="/especialidades"><i class="fas fa-chevron-right fa-xs me-1"></i>Especialidades</a></li>
+          <li class="mb-1"><a routerLink="/auth/login"><i class="fas fa-chevron-right fa-xs me-1"></i>Iniciar Sesión</a></li>
+          <li class="mb-1"><a routerLink="/auth/registro"><i class="fas fa-chevron-right fa-xs me-1"></i>Registrarse</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna Servicios -->
+      <div class="col-lg-3 col-6">
+        <h6 class="text-white mb-3 fw-semibold">Servicios</h6>
+        <ul class="list-unstyled mb-0">
+          <li class="mb-1"><a href="#"><i class="fas fa-chevron-right fa-xs me-1"></i>Medicina General</a></li>
+          <li class="mb-1"><a href="#"><i class="fas fa-chevron-right fa-xs me-1"></i>Pediatría</a></li>
+          <li class="mb-1"><a href="#"><i class="fas fa-chevron-right fa-xs me-1"></i>Cardiología</a></li>
+          <li class="mb-1"><a href="#"><i class="fas fa-chevron-right fa-xs me-1"></i>Ginecología</a></li>
+          <li class="mb-1"><a routerLink="/especialidades"><i class="fas fa-chevron-right fa-xs me-1"></i>Ver todas...</a></li>
+        </ul>
+      </div>
+
+      <!-- Columna Contacto -->
+      <div class="col-lg-3">
+        <h6 class="text-white mb-3 fw-semibold">Contacto</h6>
+        <ul class="list-unstyled mb-0 small" style="color: rgba(255,255,255,0.65);">
+          <li class="mb-2">
+            <i class="fas fa-map-marker-alt me-2" style="color: var(--color-secundario);"></i>
+            {{ config.direccion }}
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-phone me-2" style="color: var(--color-secundario);"></i>
+            {{ config.telefonoContacto }}
+          </li>
+          <li class="mb-2">
+            <a [href]="'mailto:' + config.correoContacto">
+              <i class="fas fa-envelope me-2" style="color: var(--color-secundario);"></i>
+              {{ config.correoContacto }}
+            </a>
+          </li>
+          <li>
+            <i class="fas fa-clock me-2" style="color: var(--color-secundario);"></i>
+            Lun–Sáb {{ config.horarioAperturaGeneral }} – {{ config.horarioCierreGeneral }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Pie -->
+    <div class="footer-bottom text-center">
+      <p class="mb-0">
+        &copy; {{ anioActual }} {{ config.nombreClinica }}. Todos los derechos reservados.
+        Proyecto académico UCH.
+      </p>
+    </div>
+  </div>
+</footer>

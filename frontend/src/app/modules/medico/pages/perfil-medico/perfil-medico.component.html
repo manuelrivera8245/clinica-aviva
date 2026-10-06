@@ -1,0 +1,84 @@
+<app-navbar></app-navbar>
+<div class="d-flex">
+  <app-sidebar titulo="Panel Médico" [items]="menuItems"></app-sidebar>
+  <main class="panel-layout flex-grow-1">
+    
+    <div class="page-header-aviva">
+      <h2><i class="fas fa-user-md me-2"></i>Mi Perfil</h2>
+      <p class="text-muted mb-0">Información personal y profesional de su cuenta</p>
+    </div>
+
+    <app-loading-spinner [visible]="cargando"></app-loading-spinner>
+
+    <div *ngIf="error" class="alert alert-danger d-flex align-items-center mb-4">
+      <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+      <div>
+        <h5 class="alert-heading mb-1">No se pudo cargar el perfil</h5>
+        <p class="mb-0">Hubo un problema al intentar obtener los datos del servidor. Intente nuevamente más tarde.</p>
+      </div>
+    </div>
+
+    <div class="card-aviva overflow-hidden" *ngIf="medico && !cargando" style="max-width: 800px; margin: 0 auto;">
+      <!-- Header del perfil -->
+      <div class="profile-header text-center text-white py-5 position-relative">
+        <div class="avatar-circle mx-auto mb-3 shadow">
+          {{ medico.nombres.charAt(0) }}{{ medico.apellidos.charAt(0) }}
+        </div>
+        <h3 class="fw-bold mb-1">Dr. {{ medico.nombres }} {{ medico.apellidos }}</h3>
+        <span class="badge bg-white text-primario px-3 py-2 rounded-pill shadow-sm mt-2">
+          <i class="fas fa-stethoscope me-1"></i> {{ medico.nombreEspecialidad }}
+        </span>
+      </div>
+
+      <!-- Cuerpo del perfil -->
+      <div class="p-4 p-md-5">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <h6 class="text-muted text-uppercase small fw-bold tracking-wide mb-3">Datos Personales</h6>
+            <ul class="list-group list-group-flush mb-0">
+              <li class="list-group-item px-0 bg-transparent d-flex align-items-center">
+                <div class="icon-box me-3"><i class="fas fa-id-card text-primario"></i></div>
+                <div>
+                  <small class="text-muted d-block">DNI / Documento</small>
+                  <span class="fw-semibold">{{ medico.dni }}</span>
+                </div>
+              </li>
+              <li class="list-group-item px-0 bg-transparent d-flex align-items-center">
+                <div class="icon-box me-3"><i class="fas fa-phone text-primario"></i></div>
+                <div>
+                  <small class="text-muted d-block">Teléfono de Contacto</small>
+                  <span class="fw-semibold">{{ medico.telefono || 'No registrado' }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h6 class="text-muted text-uppercase small fw-bold tracking-wide mb-3">Datos de la Cuenta</h6>
+            <ul class="list-group list-group-flush mb-0">
+              <li class="list-group-item px-0 bg-transparent d-flex align-items-center">
+                <div class="icon-box me-3"><i class="fas fa-envelope text-primario"></i></div>
+                <div>
+                  <small class="text-muted d-block">Correo Electrónico</small>
+                  <span class="fw-semibold">{{ medico.correo }}</span>
+                </div>
+              </li>
+              <li class="list-group-item px-0 bg-transparent d-flex align-items-center">
+                <div class="icon-box me-3"><i class="fas fa-calendar-check text-primario"></i></div>
+                <div>
+                  <small class="text-muted d-block">Fecha de Registro</small>
+                  <span class="fw-semibold">{{ medico.fechaRegistro | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="alert alert-info mt-4 mb-0 border-0 d-flex align-items-center">
+          <i class="fas fa-info-circle fa-2x me-3 text-info"></i>
+          <small>Para actualizar sus datos personales, información de contacto o especialidad, por favor comuníquese con la administración de la clínica.</small>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

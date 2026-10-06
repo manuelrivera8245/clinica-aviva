@@ -6,24 +6,20 @@ import { MedicoGuard } from './core/guards/medico.guard';
 import { AdminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
-  // Redirección raíz
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
 
-  // Módulo Público
   {
     path: '',
     loadChildren: () =>
       import('./modules/publico/public.module').then(m => m.PublicModule)
   },
 
-  // Módulo Auth
   {
     path: 'auth',
     loadChildren: () =>
       import('./modules/auth/auth.module').then(m => m.AuthModule)
   },
 
-  // Módulo Paciente
   {
     path: 'paciente',
     loadChildren: () =>
@@ -31,7 +27,6 @@ const routes: Routes = [
     canActivate: [AuthGuard, PacienteGuard]
   },
 
-  // Módulo Médico
   {
     path: 'medico',
     loadChildren: () =>
@@ -39,7 +34,6 @@ const routes: Routes = [
     canActivate: [AuthGuard, MedicoGuard]
   },
 
-  // Módulo Administrador
   {
     path: 'admin',
     loadChildren: () =>
@@ -47,7 +41,6 @@ const routes: Routes = [
     canActivate: [AuthGuard, AdminGuard]
   },
 
-  // Wildcard — redirige a inicio
   { path: '**', redirectTo: '/inicio' }
 ];
 

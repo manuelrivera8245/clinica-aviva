@@ -1,29 +1,23 @@
-/* ============================================================
-   CLÍNICA AVIVA — Estilos Globales
-   Importaciones Bootstrap + FontAwesome + Variables de Tema
-   ============================================================ */
 
-/* Variables de tema de la Clínica Aviva (UCH) */
+
+/* Variables */
 :root {
-  --color-primario: #0077B6;       /* Azul salud — navbar, botones primarios */
-  --color-secundario: #00B4D8;     /* Turquesa — acentos, hover */
-  --color-exito: #2ECC71;          /* Verde — estado Atendida, confirmaciones */
-  --color-peligro: #E74C3C;        /* Rojo — estado Cancelada, errores */
-  --color-advertencia: #F39C12;    /* Naranja — estado No Asistió, alertas */
-  --color-fondo: #F8F9FA;          /* Gris claro — background general */
-  --color-texto: #2C3E50;          /* Azul oscuro — texto principal */
-  --color-borde: #DEE2E6;          /* Gris claro — bordes de cards */
-  --color-sidebar: #1B2A3B;        /* Azul marino — sidebar paneles */
-  --color-sidebar-hover: #243447;  /* Hover sidebar */
+  --color-primario: #0077B6;
+  --color-secundario: #00B4D8;
+  --color-exito: #2ECC71;
+  --color-peligro: #E74C3C;
+  --color-advertencia: #F39C12;
+  --color-fondo: #F8F9FA;
+  --color-texto: #2C3E50;
+  --color-borde: #DEE2E6;
+  --color-sidebar: #1B2A3B;
+  --color-sidebar-hover: #243447;
   --sombra-card: 0 2px 12px rgba(0, 119, 182, 0.10);
   --sombra-navbar: 0 2px 8px rgba(0, 0, 0, 0.12);
   --radio-borde: 0.5rem;
   --transicion: 0.2s ease-in-out;
 }
 
-/* ============================================================
-   RESET Y BASE
-   ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -50,9 +44,6 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-texto);
 }
 
-/* ============================================================
-   SOBREESCRITURA DE BOOTSTRAP — Paleta clínica
-   ============================================================ */
 .btn-primary {
   background-color: var(--color-primario) !important;
   border-color: var(--color-primario) !important;
@@ -79,9 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 .badge-cancelada   { background-color: var(--color-peligro);     color: #fff; }
 .badge-no-asistio  { background-color: var(--color-advertencia); color: #fff; }
 
-/* ============================================================
-   CARDS PERSONALIZADAS
-   ============================================================ */
+/* CARDS */
 .card-aviva {
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-borde);
@@ -113,9 +102,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.05em;
 }
 
-/* ============================================================
-   NAVBAR
-   ============================================================ */
+/* NAVBAR */
 .navbar-aviva {
   background-color: var(--color-primario);
   box-shadow: var(--sombra-navbar);
@@ -145,9 +132,7 @@ h1, h2, h3, h4, h5, h6 {
   filter: invert(1);
 }
 
-/* ============================================================
-   SIDEBAR
-   ============================================================ */
+/* SIDEBAR */
 .sidebar-aviva {
   background-color: var(--color-sidebar);
   min-height: calc(100vh - 56px);
@@ -197,9 +182,7 @@ h1, h2, h3, h4, h5, h6 {
   min-height: calc(100vh - 56px);
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* FOOTER */
 .footer-aviva {
   background-color: var(--color-sidebar);
   color: rgba(255,255,255,0.75);
@@ -225,9 +208,7 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255,255,255,0.45);
 }
 
-/* ============================================================
-   FORMULARIOS
-   ============================================================ */
+/* FORMULARIOS */
 .form-control:focus,
 .form-select:focus {
   border-color: var(--color-primario);
@@ -240,9 +221,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.35rem;
 }
 
-/* ============================================================
-   TABLAS
-   ============================================================ */
+/* TABLAS */
 .table-aviva thead th {
   background-color: var(--color-primario);
   color: #fff;
@@ -260,9 +239,7 @@ h1, h2, h3, h4, h5, h6 {
   background-color: rgba(0, 119, 182, 0.05);
 }
 
-/* ============================================================
-   BADGES DE ESTADO DE CITA
-   ============================================================ */
+/* BADGES DE ESTADO DE CITA */
 .estado-badge {
   padding: 0.35em 0.75em;
   border-radius: 50rem;
@@ -276,9 +253,7 @@ h1, h2, h3, h4, h5, h6 {
 .estado-cancelada   { background-color: #fee2e2; color: #b91c1c; }
 .estado-no-asistio  { background-color: #fef9c3; color: #a16207; }
 
-/* ============================================================
-   HERO SECTION (Landing Page)
-   ============================================================ */
+/* Landing Page */
 .hero-aviva {
   background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
   color: #fff;
@@ -307,9 +282,6 @@ h1, h2, h3, h4, h5, h6 {
   color: rgba(255,255,255,0.88);
 }
 
-/* ============================================================
-   LOADING OVERLAY
-   ============================================================ */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -327,9 +299,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 3rem;
 }
 
-/* ============================================================
-   TOASTS / NOTIFICACIONES
-   ============================================================ */
+/* TOASTS / NOTIFICACIONES */
 .toast-container-aviva {
   position: fixed;
   top: 4.5rem;
@@ -355,9 +325,6 @@ h1, h2, h3, h4, h5, h6 {
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 768px) {
   .sidebar-aviva {
     display: none;
@@ -374,9 +341,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ============================================================
-   PASOS DE RESERVA (Stepper)
-   ============================================================ */
+/* PASOS DE RESERVA */
 .stepper {
   display: flex;
   align-items: center;
@@ -442,9 +407,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* ============================================================
-   UTILIDADES EXTRAS
-   ============================================================ */
+/* UTILIDADES */
 .page-header-aviva {
   border-bottom: 2px solid var(--color-borde);
   padding-bottom: 1rem;

@@ -278,9 +278,7 @@ clinica-aviva/
 │   └── clinica_aviva_schema.sql        # DDL completo del esquema MySQL
 │
 ├── .gitignore
-├── README.md
-├── RESUMEN_PROYECTO.md
-└── INSTRUCCIONES_PROYECTO.md
+└── README.md
 ```
 
 ---

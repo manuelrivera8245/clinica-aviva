@@ -455,6 +455,4 @@ Cada rol de usuario tiene su propio módulo Angular con *lazy loading* (`loadChi
 
 **Proyecto académico desarrollado para la carrera de Ingeniería de Sistemas e Informática**
 
-*Universidad — 2024*
-
 </div>

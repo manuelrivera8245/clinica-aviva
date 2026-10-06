@@ -1,12 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/**
- * Pipe diaSemana.
- * Convierte el número de día de semana (1-7) al nombre en español.
- * Coincide con el enum DiaSemana.java (1=Lunes, 7=Domingo).
- *
- * Uso: {{ horario.diaSemana | diaSemana }}
- */
 @Pipe({
   name: 'diaSemana'
 })

@@ -69,9 +69,9 @@ El resultado: médicos con tiempos muertos, pacientes frustrados y una administr
 | Nombre Completo | GitHub |
 |---|---|
 | Jose Manuel Rivera Laura | [@manuelrivera8245](https://github.com/manuelrivera8245) |
-| Jeremy Yober Reyes Garcilazo | [@usuario](https://github.com/jerreyesga-debug) |
-| Angelo Jesus Saavedra Chave | [@usuario](https://github.com/Gelo-cpu) |
-| Piero Alessandro Chumbes Jara | [@usuario](https://github.com/Chambers07) |
+| Jeremy Yober Reyes Garcilazo | [@jerreyesga-debug](https://github.com/jerreyesga-debug) |
+| Angelo Jesus Saavedra Chave | [@Gelo-cpu](https://github.com/Gelo-cpu) |
+| Piero Alessandro Chumbes Jara | [@Chambers07](https://github.com/Chambers07) |
 
 ---
 

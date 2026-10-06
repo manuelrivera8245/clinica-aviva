@@ -2,13 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export type EstadoCita = 'Programada' | 'Atendida' | 'No Asistio' | 'Cancelada';
 
-/**
- * Pipe estadoCita.
- * Transforma el valor del enum EstadoCita.java en texto formateado con icono.
- * Valores válidos: 'Programada', 'Atendida', 'No Asistio', 'Cancelada'.
- *
- * Uso: {{ cita.estado | estadoCita }}
- */
 @Pipe({
   name: 'estadoCita'
 })

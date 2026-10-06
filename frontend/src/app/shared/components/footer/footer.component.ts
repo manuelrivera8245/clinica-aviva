@@ -37,7 +37,7 @@ export class FooterComponent implements OnInit {
       next: res => {
         if (res.datos) this.config = res.datos;
       },
-      error: () => { /* usa los datos por defecto */ }
+      error: () => {}
     });
   }
 }

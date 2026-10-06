@@ -91,21 +91,21 @@ El sistema sigue una arquitectura **Cliente-Servidor desacoplada** con diseño d
 ┌─────────────────────────────────────────────────────────────────────┐
 │                   SERVIDOR — Spring Boot 3.2.5                      │
 │                          Puerto 8080                                │
-│  ┌─────────────────────────────────────────────────────────────┐   │
-│  │   Capa de Seguridad — Spring Security + JWT Filter          │   │
-│  └──────────────────────────┬──────────────────────────────────┘   │
-│  ┌───────────────────────────▼──────────────────────────────────┐  │
-│  │   Capa de Controladores REST (@RestController)               │  │
-│  │   Auth | Cita | Médico | Paciente | Admin | Reportes         │  │
-│  └──────────────────────────┬───────────────────────────────────┘  │
-│  ┌───────────────────────────▼──────────────────────────────────┐  │
-│  │   Capa de Servicios (@Service) — Lógica de Negocio           │  │
-│  │   + Generación de PDF (OpenPDF) + Manejo de Excepciones      │  │
-│  └──────────────────────────┬───────────────────────────────────┘  │
-│  ┌───────────────────────────▼──────────────────────────────────┐  │
-│  │   Capa de Repositorios (Spring Data JPA / Hibernate)         │  │
-│  │   @Repository — Entidades + DTOs + Stored Procedures         │  │
-│  └──────────────────────────┬───────────────────────────────────┘  │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │   Capa de Seguridad — Spring Security + JWT Filter          │    │
+│  └──────────────────────────┬──────────────────────────────────┘    │
+│  ┌───────────────────────────▼──────────────────────────────────┐   │
+│  │   Capa de Controladores REST (@RestController)               │   │
+│  │   Auth | Cita | Médico | Paciente | Admin | Reportes         │   │
+│  └──────────────────────────┬───────────────────────────────────┘   │
+│  ┌───────────────────────────▼──────────────────────────────────┐   │
+│  │   Capa de Servicios (@Service) — Lógica de Negocio           │   │
+│  │   + Generación de PDF (OpenPDF) + Manejo de Excepciones      │   │
+│  └──────────────────────────┬───────────────────────────────────┘   │
+│  ┌───────────────────────────▼──────────────────────────────────┐   │
+│  │   Capa de Repositorios (Spring Data JPA / Hibernate)         │   │
+│  │   @Repository — Entidades + DTOs + Stored Procedures         │   │
+│  └──────────────────────────┬───────────────────────────────────┘   │
 └──────────────────────────────┼──────────────────────────────────────┘
                                │  JDBC — HikariCP Connection Pool
                                ▼

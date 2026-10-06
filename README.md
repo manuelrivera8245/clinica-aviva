@@ -66,13 +66,12 @@ El resultado: médicos con tiempos muertos, pacientes frustrados y una administr
 
 > Este proyecto fue desarrollado por el siguiente equipo. Los colaboradores pueden completar sus datos en esta sección.
 
-| Rol | Nombre Completo | GitHub |
-|---|---|---|
-| Desarrollador | Manuel Rivera | [@manuelrivera8245](https://github.com/manuelrivera8245) |
-| Desarrollador | [Nombre Apellido] | [@usuario](https://github.com/usuario) |
-| Desarrollador | [Nombre Apellido] | [@usuario](https://github.com/usuario) |
-| Desarrollador | [Nombre Apellido] | [@usuario](https://github.com/usuario) |
-| Desarrollador | [Nombre Apellido] | [@usuario](https://github.com/usuario) |
+| Nombre Completo | GitHub |
+|---|---|
+| Jose Manuel Rivera Laura | [@manuelrivera8245](https://github.com/manuelrivera8245) |
+| Jeremy Yober Reyes Garcilazo | [@usuario](https://github.com/jerreyesga-debug) |
+| Angelo Jesus Saavedra Chave | [@usuario](https://github.com/Gelo-cpu) |
+| Piero Alessandro Chumbes Jara | [@usuario](https://github.com/Chambers07) |
 
 ---
 

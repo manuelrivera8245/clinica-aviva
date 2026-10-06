@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 import { TokenService } from '../services/token.service';
 import { NotificationService } from '../services/notification.service';
 
-// Interceptor de errores HTTP
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
@@ -38,7 +37,6 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.notificationService.warning('El recurso solicitado no fue encontrado.');
             break;
           case 409:
-            // Conflicto
             this.notificationService.warning(
               error.error?.message || 'Ya existe un registro con esos datos.'
             );

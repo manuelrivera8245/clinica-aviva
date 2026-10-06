@@ -14,12 +14,10 @@ export class ReservarCitaComponent implements OnInit {
   pasoActual = 1;
   cargando = false;
 
-  // Datos de los pasos
   especialidades: any[] = [];
   medicos: any[] = [];
   turnosDisponibles: TurnoDisponible[] = [];
 
-  // Selecciones
   especialidadSeleccionada: any = null;
   medicoSeleccionado: any = null;
   turnoSeleccionado: TurnoDisponible | null = null;

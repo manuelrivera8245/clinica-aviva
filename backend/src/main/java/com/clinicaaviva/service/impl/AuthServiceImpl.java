@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-// Servicio de autenticacion
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtAuthenticationResponse login(LoginRequest request) {
-
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -68,18 +66,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public JwtAuthenticationResponse registrarPaciente(RegistroPacienteRequest request) {
-        // Validar que no exista el DNI
         if (pacienteRepository.existsByDni(request.getDni())) {
             throw new IllegalArgumentException("Ya existe un paciente registrado con el DNI: " + request.getDni());
         }
 
-        // Validar que no exista el correo
         if (pacienteRepository.existsByCorreo(request.getCorreo())) {
             throw new IllegalArgumentException(
                     "Ya existe un paciente registrado con el correo: " + request.getCorreo());
         }
 
-        // Crear paciente
         Paciente paciente = Paciente.builder()
                 .dni(request.getDni())
                 .nombres(request.getNombres())
@@ -90,10 +85,10 @@ public class AuthServiceImpl implements AuthService {
                 .activo(true)
                 .build();
 
-        paciente = pacienteRepository.save(java.util.Objects.requireNonNull(paciente));
+        paciente = pacienteRepository.save(paciente);
         log.info("Paciente registrado exitosamente: {} {}", request.getNombres(), request.getApellidos());
 
-        // Autenticar automaticamente al nuevo paciente
+        // Autenticar automáticamente tras el registro
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         paciente.getCorreo(),

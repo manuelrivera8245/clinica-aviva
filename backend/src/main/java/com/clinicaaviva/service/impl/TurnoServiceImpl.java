@@ -40,7 +40,7 @@ public class TurnoServiceImpl implements TurnoService {
     @Override
     @Transactional(readOnly = true)
     public List<TurnoDisponibleResponse> listarTurnosDisponiblesPorEspecialidad(Integer idEspecialidad) {
-        return turnoRepository.findTurnosDisponiblesByEspecialidad(java.util.Objects.requireNonNull(idEspecialidad), LocalDate.now()).stream()
+        return turnoRepository.findTurnosDisponiblesByEspecialidad(idEspecialidad, LocalDate.now()).stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
     }
@@ -49,11 +49,11 @@ public class TurnoServiceImpl implements TurnoService {
     @Transactional(readOnly = true)
     public List<TurnoDisponibleResponse> listarTurnosDisponiblesPorMedico(Integer idMedico, LocalDate fecha) {
         if (fecha != null) {
-            return turnoRepository.findTurnosLibresByMedicoAndFecha(java.util.Objects.requireNonNull(idMedico), fecha).stream()
+            return turnoRepository.findTurnosLibresByMedicoAndFecha(idMedico, fecha).stream()
                     .map(this::mapToResponse)
                     .collect(Collectors.toList());
         } else {
-            return turnoRepository.findTurnosLibresByMedicoDesdeFecha(java.util.Objects.requireNonNull(idMedico), LocalDate.now()).stream()
+            return turnoRepository.findTurnosLibresByMedicoDesdeFecha(idMedico, LocalDate.now()).stream()
                     .map(this::mapToResponse)
                     .collect(Collectors.toList());
         }
@@ -62,7 +62,7 @@ public class TurnoServiceImpl implements TurnoService {
     @Override
     @Transactional
     public void generarTurnosDesdeHorario(Integer idMedico, LocalDate fechaDesde, LocalDate fechaHasta) {
-        if (!medicoRepository.existsById(java.util.Objects.requireNonNull(idMedico))) {
+        if (!medicoRepository.existsById(idMedico)) {
             throw new IllegalArgumentException("Médico no encontrado: " + idMedico);
         }
         if (fechaHasta.isBefore(fechaDesde)) {
@@ -74,11 +74,10 @@ public class TurnoServiceImpl implements TurnoService {
             throw new IllegalStateException("El médico no tiene horarios configurados");
         }
 
-        Medico medico = medicoRepository.getReferenceById(java.util.Objects.requireNonNull(idMedico));
+        Medico medico = medicoRepository.getReferenceById(idMedico);
         int turnosCreados = 0;
         int turnosDuplicados = 0;
 
-        // Iterar cada día del rango
         LocalDate dia = fechaDesde;
         while (!dia.isAfter(fechaHasta)) {
             final int diaSemana = dia.getDayOfWeek().getValue();
@@ -86,19 +85,17 @@ public class TurnoServiceImpl implements TurnoService {
             for (HorarioMedico horario : horarios) {
                 if (!horario.getDiaSemana().equals(diaSemana)) continue;
 
-                // Dividir bloque horario en slots
                 int duracion = (horario.getDuracionTurnoMin() != null && horario.getDuracionTurnoMin() > 0)
                         ? horario.getDuracionTurnoMin() : 30;
 
                 LocalTime inicio = horario.getHoraInicio();
                 while (true) {
                     LocalTime fin = inicio.plusMinutes(duracion);
-                    
-                    // Detectar cruce de medianoche
+
+                    // plusMinutes puede cruzar medianoche y volver a 00:00 o quedar antes del inicio
                     boolean cruzoMedianoche = fin.isBefore(inicio) || fin.equals(LocalTime.MIDNIGHT);
-                    
+
                     if (cruzoMedianoche) {
-                        // Permitir exacto a medianoche
                         if (fin.equals(LocalTime.MIDNIGHT) && horario.getHoraFin().equals(LocalTime.of(23, 59))) {
                             fin = LocalTime.of(23, 59);
                         } else {
@@ -108,9 +105,7 @@ public class TurnoServiceImpl implements TurnoService {
                         break;
                     }
 
-                    // Evitar duplicados
-                    boolean existe = turnoRepository.existsByMedicoIdMedicoAndFechaAndHoraInicio(
-                            java.util.Objects.requireNonNull(idMedico), dia, inicio);
+                    boolean existe = turnoRepository.existsByMedicoIdMedicoAndFechaAndHoraInicio(idMedico, dia, inicio);
                     if (!existe) {
                         Turno nuevoTurno = Turno.builder()
                                 .medico(medico)
@@ -119,15 +114,13 @@ public class TurnoServiceImpl implements TurnoService {
                                 .horaFin(fin)
                                 .estado(EstadoTurno.Libre)
                                 .build();
-                        nuevoTurno = turnoRepository.save(java.util.Objects.requireNonNull(nuevoTurno));
+                        turnoRepository.save(nuevoTurno);
                         turnosCreados++;
                     } else {
                         turnosDuplicados++;
                     }
-                    
-                    if (cruzoMedianoche) {
-                        break;
-                    }
+
+                    if (cruzoMedianoche) break;
                     inicio = fin;
                 }
             }
@@ -153,30 +146,28 @@ public class TurnoServiceImpl implements TurnoService {
     @Override
     @Transactional
     public TurnoDisponibleResponse crearTurno(TurnoRequest request) {
-        // Validar que el medico existe
-        if (!medicoRepository.existsById(java.util.Objects.requireNonNull(request.getIdMedico()))) {
+        if (!medicoRepository.existsById(request.getIdMedico())) {
             throw new IllegalArgumentException("Medico no encontrado: " + request.getIdMedico());
         }
         Turno turno = Turno.builder()
-                .medico(medicoRepository.getReferenceById(java.util.Objects.requireNonNull(request.getIdMedico())))
+                .medico(medicoRepository.getReferenceById(request.getIdMedico()))
                 .fecha(request.getFecha())
                 .horaInicio(request.getHoraInicio())
                 .horaFin(request.getHoraFin())
                 .estado(EstadoTurno.Libre)
                 .build();
-        Turno guardado = turnoRepository.save(java.util.Objects.requireNonNull(turno));
+        Turno guardado = turnoRepository.save(turno);
         return mapToResponse(guardado);
     }
 
     @Override
     @Transactional
     public void eliminarTurno(Integer idTurno) {
-        Turno turno = turnoRepository.findById(java.util.Objects.requireNonNull(idTurno))
+        Turno turno = turnoRepository.findById(idTurno)
                 .orElseThrow(() -> new IllegalArgumentException("Turno no encontrado: " + idTurno));
-        // No permitir eliminar turnos con cita activa
         if (turno.getEstado() == EstadoTurno.Ocupado) {
             throw new IllegalArgumentException("No se puede eliminar un turno ocupado (tiene cita asociada)");
         }
-        turnoRepository.deleteById(java.util.Objects.requireNonNull(idTurno));
+        turnoRepository.deleteById(idTurno);
     }
 }

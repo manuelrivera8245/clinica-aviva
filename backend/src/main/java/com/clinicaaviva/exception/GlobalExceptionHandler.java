@@ -13,10 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Manejador global de excepciones para toda la API.
- * Captura y formatea errores de forma consistente para el frontend Angular.
- */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

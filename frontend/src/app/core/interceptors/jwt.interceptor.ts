@@ -8,11 +8,6 @@ import {
 import { Observable } from 'rxjs';
 import { TokenService } from '../services/token.service';
 
-/**
- * Interceptor JWT.
- * Inyecta automáticamente el header "Authorization: Bearer <token>"
- * en todas las peticiones HTTP salientes si existe un token en sesión.
- */
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 

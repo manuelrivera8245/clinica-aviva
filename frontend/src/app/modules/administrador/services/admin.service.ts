@@ -23,10 +23,8 @@ export interface DashboardAdminData {
   citasHoy: number;
   tasaAusentismo: number;
   citasPorEstado: { estado: string; cantidad: number }[];
-  // Lista de citas del dia
   citasDelDia?: CitaResumenItem[];
 }
-
 
 export interface MedicoRequest {
   nombres: string; apellidos: string; correo: string;
@@ -38,7 +36,6 @@ export interface TurnoRequest {
   horaInicio: string; horaFin: string;
 }
 
-// Ausentismo medico
 export interface AusentismoMedicoItem {
   nombreMedico: string;
   especialidad: string;
@@ -93,20 +90,17 @@ export interface GenerarTurnosRequest {
   fechaHasta: string;
 }
 
-// Servicio administrativo
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private readonly baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
-  // Dashboard
   getDashboard(): Observable<DashboardAdminData> {
     return this.http.get<ApiResponse<DashboardAdminData>>(`${this.baseUrl}/dashboard/resumen`)
       .pipe(map(r => r.datos));
   }
 
-  // Médicos
   getMedicos(): Observable<any[]> {
     return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/medicos`)
       .pipe(map(r => r.datos || []));
@@ -127,7 +121,6 @@ export class AdminService {
       .pipe(map(r => r.datos));
   }
 
-  // Turnos
   getTurnos(): Observable<any[]> {
     return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/turnos`)
       .pipe(map(r => r.datos || []));
@@ -143,7 +136,6 @@ export class AdminService {
       .pipe(map(r => r.datos));
   }
 
-  // Pacientes
   getPacientes(): Observable<any[]> {
     return this.http.get<ApiResponse<any[]>>(`${this.baseUrl}/pacientes`)
       .pipe(map(r => r.datos || []));
@@ -154,7 +146,6 @@ export class AdminService {
       .pipe(map(r => r.datos));
   }
 
-  // Reportes
   getReporteCitas(desde?: string, hasta?: string): Observable<any[]> {
     let params = new HttpParams();
     if (desde) params = params.set('desde', desde);
@@ -168,7 +159,6 @@ export class AdminService {
       .pipe(map(r => r.datos || []));
   }
 
-  // Estadisticas de ausentismo por medico
   getReporteAusentismoPorMedico(desde?: string, hasta?: string): Observable<AusentismoMedicoItem[]> {
     let params = new HttpParams();
     if (desde) params = params.set('desde', desde);
@@ -177,7 +167,6 @@ export class AdminService {
       .pipe(map(r => r.datos || []));
   }
 
-  // Configuración
   getConfiguracion(): Observable<any> {
     return this.http.get<ApiResponse<any>>(`${this.baseUrl}/configuracion`)
       .pipe(map(r => r.datos));
@@ -187,8 +176,6 @@ export class AdminService {
     return this.http.put<ApiResponse<any>>(`${this.baseUrl}/configuracion`, data)
       .pipe(map(r => r.datos));
   }
-
-  // --- Especialidades y Agendamiento ---
 
   getEspecialidades(): Observable<any[]> {
     return this.http.get<ApiResponse<any[]>>(`${environment.apiUrl}/especialidades`)
@@ -220,8 +207,6 @@ export class AdminService {
     return this.http.post<ApiResponse<string>>(`${environment.apiUrl}/citas/reservar`, { idTurno }, { params })
       .pipe(map(r => r.datos));
   }
-
-  // --- Horarios Médicos ---
 
   getHorarios(medicoId: number): Observable<HorarioMedicoItem[]> {
     const params = new HttpParams().set('medicoId', medicoId.toString());

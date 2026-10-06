@@ -24,12 +24,6 @@ export interface RegistroPacienteRequest {
   contrasena: string;
 }
 
-/**
- * Servicio de autenticación.
- * Gestiona login, registro, logout y estado de autenticación.
- * POST /api/auth/login  →  AuthResponse
- * POST /api/auth/registro → AuthResponse
- */
 @Injectable({
   providedIn: 'root'
 })
@@ -43,10 +37,6 @@ export class AuthService {
     private router: Router
   ) { }
 
-  /**
-   * POST /api/auth/login
-   * Autentica al usuario y guarda token + datos de sesión.
-   */
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<ApiResponse<AuthResponse>>(
       `${this.apiUrl}/login`, request
@@ -59,10 +49,6 @@ export class AuthService {
     );
   }
 
-  /**
-   * POST /api/auth/registro
-   * Registra un nuevo paciente y autentica inmediatamente.
-   */
   registrar(request: RegistroPacienteRequest): Observable<AuthResponse> {
     return this.http.post<ApiResponse<AuthResponse>>(
       `${this.apiUrl}/registro`, request
@@ -75,38 +61,29 @@ export class AuthService {
     );
   }
 
-  /**
-   * GET /api/auth/verificar?credencial={valor}
-   * Verifica si un DNI, correo o usuario ya está registrado.
-   */
   verificarCredencial(credencial: string): Observable<boolean> {
     return this.http.get<ApiResponse<boolean>>(
       `${this.apiUrl}/verificar`, { params: { credencial } }
     ).pipe(map(r => r.datos));
   }
 
-  /** Cierra sesión: limpia localStorage y redirige a login */
   logout(): void {
     this.tokenService.clearSession();
     this.router.navigate(['/auth/login']);
   }
 
-  /** ¿Hay un token válido y no expirado en sesión? */
   isAuthenticated(): boolean {
     return this.tokenService.hasToken() && !this.tokenService.isTokenExpired();
   }
 
-  /** Rol del usuario actual (desde localStorage) */
   getRolActual(): RolUsuario | null {
     return this.tokenService.getUser()?.rol ?? null;
   }
 
-  /** Datos completos del usuario de sesión */
   getUsuarioActual(): UsuarioSesion | null {
     return this.tokenService.getUser();
   }
 
-  /** Redirige al dashboard correcto según el rol */
   redirigirSegunRol(): void {
     const rol = this.getRolActual();
     switch (rol) {

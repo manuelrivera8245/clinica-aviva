@@ -12,11 +12,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-/**
- * Proveedor de tokens JWT.
- * Genera, valida y extrae informacion de los tokens JWT utilizados
- * para la autenticacion stateless entre el frontend Angular y el backend.
- */
 @Slf4j
 @Component
 public class JwtTokenProvider {
@@ -31,12 +26,8 @@ public class JwtTokenProvider {
         this.jwtExpirationMs = jwtExpirationMs;
     }
 
-    /**
-     * Genera un token JWT a partir de la autenticacion exitosa.
-     */
     public String generateToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
         Date expiryDate = new Date(System.currentTimeMillis() + jwtExpirationMs);
 
         return Jwts.builder()
@@ -51,78 +42,51 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    /**
-     * Extrae el nombre de usuario (subject) del token.
-     */
     public String getUsernameFromToken(String token) {
-
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .verifyWith(jwtSecret)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.getSubject();
+                .getPayload()
+                .getSubject();
     }
 
-    /**
-     * Extrae el rol del usuario del token.
-     */
     public String getRolFromToken(String token) {
-
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .verifyWith(jwtSecret)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.get("rol", String.class);
+                .getPayload()
+                .get("rol", String.class);
     }
 
-    /**
-     * Extrae el ID del usuario del token.
-     */
     public Integer getIdFromToken(String token) {
-
-        Claims claims = Jwts.parser()
+        return Jwts.parser()
                 .verifyWith(jwtSecret)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.get("id", Integer.class);
+                .getPayload()
+                .get("id", Integer.class);
     }
 
-    /**
-     * Valida la firma y expiracion del token.
-     */
     public boolean validateToken(String token) {
-
         try {
-
             Jwts.parser()
                     .verifyWith(jwtSecret)
                     .build()
                     .parseSignedClaims(token);
-
             return true;
-
         } catch (SecurityException ex) {
             log.error("Firma JWT invalida: {}", ex.getMessage());
-
         } catch (MalformedJwtException ex) {
             log.error("Token JWT malformado: {}", ex.getMessage());
-
         } catch (ExpiredJwtException ex) {
             log.error("Token JWT expirado: {}", ex.getMessage());
-
         } catch (UnsupportedJwtException ex) {
             log.error("Token JWT no soportado: {}", ex.getMessage());
-
         } catch (IllegalArgumentException ex) {
             log.error("Claims JWT vacio: {}", ex.getMessage());
         }
-
         return false;
     }
 }
